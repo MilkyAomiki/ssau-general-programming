@@ -1,5 +1,6 @@
 #include <iostream>
 #include <regex>
+#include <vector>
 
 using namespace std;
 
@@ -150,6 +151,8 @@ vector<SeriesTerm> calcAndPrintSeriesSum(double alpha, double x)
 			n++;
 		} while (meassError > alpha);
 	}
+
+	return seriesTerms;
 }
 
 class SeriesTerm {
