@@ -1,6 +1,7 @@
 #include <iostream>
 #include <regex>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -109,16 +110,38 @@ double calcSeriesTermAtN(double x, int n)
 	return ( pow(-1, n+1) * pow(x, 2*n+1) ) / (4 * pow(n, 2)-1);
 }
 
-vector<SeriesTerm> calcAndPrintSeriesSum(double alpha, double x)
+class SeriesTerm {
+	public: 
+		int iterationNumber;
+		double currentTerm;
+		double partialSum;
+		double measurementError;
+};
+
+vector<SeriesTerm> calcAndPrintSeriesSum(double alpha, double x, vector<SeriesTerm>* alreadyCalculatedTerms = NULL)
 {
 	int intAlpha = alpha;
 
 	double sum = 0;
-	double a_n1 = calcSeriesTermAtN(x, 1);
 	vector<SeriesTerm> seriesTerms;
+
+	if (alreadyCalculatedTerms != NULL)
+		seriesTerms = *alreadyCalculatedTerms;
+
+	double a_n1;
+	
+	if (seriesTerms.size() > 0)
+	{
+		a_n1 = seriesTerms[seriesTerms.size()-1].currentTerm;
+	}
+	else
+	{
+		a_n1 = calcSeriesTermAtN(x, 1);
+	}
+
 	if (intAlpha == alpha)
 	{
-		for (int n = 1; n <= intAlpha; n++)
+		for (int n = seriesTerms.size()+1; n <= intAlpha; n++)
 		{
 			double a_curr = a_n1;
 			a_n1 = calcSeriesTermAtN(x, n+1);
@@ -138,8 +161,15 @@ vector<SeriesTerm> calcAndPrintSeriesSum(double alpha, double x)
 	else
 	{
 		int n = 1;
-		double meassError = 0;
-		do
+		double meassError = alpha+1;
+
+		if (seriesTerms.size() > 0)
+		{
+			meassError = seriesTerms[seriesTerms.size()-1].measurementError;
+			n = seriesTerms[seriesTerms.size()-1].iterationNumber + 1;
+		}
+		
+		while (meassError > alpha)
 		{
 			double a_curr = a_n1;
 			a_n1 = calcSeriesTermAtN(x, n+1);
@@ -147,23 +177,25 @@ vector<SeriesTerm> calcAndPrintSeriesSum(double alpha, double x)
 			sum += (x + 2*a_curr);
 			meassError = abs(a_n1/sum);
 
-			cout << "Iteration number: " << n << "; Last summed element: " << a_curr << "; Partial sum: " << sum << "; Measurment error: " << meassError << endl;
+			SeriesTerm currTerm;
+			currTerm.iterationNumber = n;
+			currTerm.currentTerm = a_curr;
+			currTerm.partialSum = sum;
+			currTerm.measurementError;
+
+			seriesTerms.push_back(currTerm);
+
 			n++;
-		} while (meassError > alpha);
+		};
 	}
 
 	return seriesTerms;
 }
 
-class SeriesTerm {
-	public: 
-		int iterationNumber;
-		int currentTerm;
-		int partialSum;
-		double measurementError;
-}
-
 int main() {
+
+	//маппинг x -> члены ряда
+	map<double, vector<SeriesTerm>> previousCalculations;
 
 	//loop for repeating algo if user needs it
 	bool doContinue = false;
@@ -174,10 +206,23 @@ int main() {
 
 		alpha = readDouble("Enter alpha: ");
 		x = readDoubleBetween0and1("Enter x: ");
+		
+		vector<SeriesTerm> alreadyCalculatedTerms;
+		if (previousCalculations.count(x))
+		{
+			alreadyCalculatedTerms = previousCalculations[x];
+		}
 
-		calcAndPrintSeriesSum(alpha, x);
+		vector<SeriesTerm> sumResult = calcAndPrintSeriesSum(alpha, x, &alreadyCalculatedTerms);
+		previousCalculations[x] = sumResult;
 
-		return askWhetherToContinue();
+		for (int i = 0; i < sumResult.size(); i++)
+		{
+			SeriesTerm currTerm = sumResult[i];
+			cout << "Iteration number: " << currTerm.iterationNumber << "; Last summed element: " << currTerm.currentTerm << "; Partial sum: " << currTerm.partialSum << "; Measurment error: " << currTerm.measurementError << endl;
+		}
+
+		doContinue = askWhetherToContinue();
 
 	} while (doContinue);
 }
