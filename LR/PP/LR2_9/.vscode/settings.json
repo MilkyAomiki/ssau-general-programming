@@ -2,6 +2,7 @@
     "files.associations": {
         "cstdlib": "cpp",
         "iostream": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "vector": "cpp"
     }
 }

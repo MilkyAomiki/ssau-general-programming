@@ -165,8 +165,8 @@ vector<SeriesTerm> calcAndPrintSeriesSum(double alpha, double x, vector<SeriesTe
 
 		if (seriesTerms.size() > 0)
 		{
-			meassError = seriesTerms[seriesTerms.size()-1].measurementError;
-			n = seriesTerms[seriesTerms.size()-1].iterationNumber + 1;
+			meassError = seriesTerms.back().measurementError;
+			n = seriesTerms.back().iterationNumber + 1;
 		}
 		
 		while (meassError > alpha)
@@ -214,13 +214,21 @@ int main() {
 		}
 
 		vector<SeriesTerm> sumResult = calcAndPrintSeriesSum(alpha, x, &alreadyCalculatedTerms);
-		previousCalculations[x] = sumResult;
+
+		int previouslyCalcSize = 0;
+		if (previousCalculations.count(x))
+			previouslyCalcSize = previousCalculations[x].size();
 
 		for (int i = 0; i < sumResult.size(); i++)
 		{
 			SeriesTerm currTerm = sumResult[i];
+			if (i < previouslyCalcSize)
+				cout << "(*) ";
+
 			cout << "Iteration number: " << currTerm.iterationNumber << "; Last summed element: " << currTerm.currentTerm << "; Partial sum: " << currTerm.partialSum << "; Measurment error: " << currTerm.measurementError << endl;
 		}
+		
+		previousCalculations[x] = sumResult;
 
 		doContinue = askWhetherToContinue();
 
