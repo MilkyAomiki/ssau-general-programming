@@ -1,64 +1,9 @@
 #include <iostream>
+#include <vector>
+#include <fstream>
 #include <string>
-#include <regex>
-#include <stdlib.h>
-#include <time.h>
-
-//Quicksort with 3-way partition
 
 using namespace std;
-
-const int ARR_PRINT_MAX_SIZE = 50;
-const bool DEBUG = false;
-
-void printArray(vector<int> &arr)
-{
-	for (int i = 0; i < arr.size() && i < ARR_PRINT_MAX_SIZE; i++)
-	{
-		cout << arr[i] << " ";
-	}
-	
-	if (arr.size() > ARR_PRINT_MAX_SIZE)
-	{
-		cout << "... (" << arr.size() - ARR_PRINT_MAX_SIZE << " more)";
-	}
-
-	cout << endl;	
-}
-
-/// @brief Reads int and performs input validation, asks for input again if needed 
-/// @return input int
-int readIntLine()
-{
-	regex reg_matchInts = regex(R"(^[+-]?[0-9]+$)");
-	int result = 0;
-	bool done = false;
-	while (!done)
-	{
-		try
-		{
-			string input;
-			getline(cin, input);
-			result = stoi(input);
-
-			//regex to block the case when input is smth like "100ffas"
-			if(!regex_match(input, reg_matchInts))
-				throw invalid_argument("");
-
-			done = true;
-		}
-		catch(const invalid_argument& e)
-		{
-			cout << "(The number was in invalid format, enter again)\n";
-		}
-		catch(const out_of_range& e)
-		{
-			cout << "(The number was way too big, enter again)\n";
-		}
-	}
-
-	return result;
-}
 
 bool askWhetherToContinue()
 {
@@ -83,29 +28,48 @@ int main()
 	bool doContinue = false;
 	do
 	{
-		doContinue = false;
-		cout << "Enter the number of elements:\n";
+		ifstream ifout;
+		ifout.open("input.txt");
 
-		int size = -1;
-		while (size < 1)
+		vector<char> input;
+		char current;
+		//This reads the integer and returns the stream. When a stream is used as bool value it checks to see if the stream is valid. Valid means eof() and bad() are both false
+		while (ifout >> noskipws >> current)
 		{
-			size = readIntLine();
-			if (size < 1)
-				cout << "(The number has to be greater than 0)" << endl;
+			input.push_back(current);
 		}
 
-		// Providing a seed value for random numbers
-		srand((unsigned) time(NULL));
+		ifout.close();
 
-		vector<int> arr = generateRandomArray(size);
+		ofstream ofout;
+		ofout.open("output.txt");
+		ofout.clear();
 
-		cout << "Generated random array: " << endl;
-		printArray(arr);
+		vector<char> nums;
+		for (int i = 0; i < input.size(); i++)
+		{
+			char curr = input[i];
 
-		cout << "Sorted array: " << endl;
-		quickSort(arr, 0, size-1);
+			if (!isdigit(curr))
+			{
+				ofout << curr;
+			}
+			else
+			{
+				nums.push_back(curr);
+			}
+		}
 
-		printArray(arr);
+		ofout << endl;
+
+		for (int i = 0; i < nums.size(); i++)
+		{
+			ofout << " " << nums[i];
+		}
+
+		ofout << endl;
+
+		ofout.close();
 
 		doContinue = askWhetherToContinue();
 	} while (doContinue);

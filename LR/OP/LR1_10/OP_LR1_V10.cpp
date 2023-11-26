@@ -1,7 +1,9 @@
 #include <iostream>
 
+using namespace std;
+
 int main()
 {
-    std::cout << "yo";
+    cout << "Hello world!";
     return 0;
 }
