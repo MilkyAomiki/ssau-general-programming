@@ -2,8 +2,6 @@
 
 #include "../IoExtensions.h"
 
-/// @brief Reads int and performs input validation, asks for input again if needed 
-/// @return input int
 int readIntLine(string messageBefore, istream& inps, ostream& outs, bool exitOnException, int maxValue, int minValue)
 {
 	regex reg_matchInts = regex(R"(^[+-]?[0-9]+$)");
@@ -32,15 +30,18 @@ int readIntLine(string messageBefore, istream& inps, ostream& outs, bool exitOnE
 		}
 		catch(const invalid_argument& e)
 		{
-			outs << "(The number was in invalid format, enter again)" << endl;
-			
-			if (exitOnException) throw;
+			string what = "(The number was in invalid format, enter again)";
+
+			outs << what << endl;
+			if (exitOnException) throw invalid_argument(what);
 		}
 		catch(const out_of_range& e)
 		{
-			outs << "(The number was out of range (" << minValue << "<= n <= " << maxValue << "), enter again)" << endl;
+			string what = "(The number was out of range (" + to_string(minValue) + "<= n <= " + to_string(maxValue) + "), enter again)";
+
+			outs << what << endl;
 			
-			if (exitOnException) throw;
+			if (exitOnException) throw out_of_range(what);
 		}
 	}
 	while (!done && !exitOnException);

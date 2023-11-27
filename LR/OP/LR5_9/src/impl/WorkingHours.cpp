@@ -9,18 +9,94 @@
 
 using namespace std;
 
+WorkingHours::WorkingHours(const day_month* workDate, const tm* arriveTime, const tm* finishTime)
+{
+    if (workDate == nullptr)
+    {
+        day_month dm;
+        dm.day = 01;
+        dm.month = 01;
+
+        set_workDate(dm);
+    }
+    else
+    {
+        set_workDate(*workDate);
+    }
+
+    if (arriveTime == nullptr)
+    {
+        tm arrTime;
+        arrTime.tm_hour = 00;
+        arrTime.tm_min = 00;
+
+        set_arriveTime(arrTime);
+    }
+    else
+    {
+        set_arriveTime(*arriveTime);
+    }
+
+    if (finishTime == nullptr)
+    {
+        tm finTime;
+        finTime.tm_hour = 00;
+        finTime.tm_min = 00;
+
+        set_finishTime(finTime);
+    }
+    else
+    {
+        set_finishTime(*finishTime);
+    }
+}
+
+WorkingHours::WorkingHours(const WorkingHours& obj) : WorkingHours(&obj.workDate, &obj.arriveTime, &obj.finishTime)
+{
+}
+
+day_month& WorkingHours::get_workDate()
+{
+    return workDate;
+}
+
+void WorkingHours::set_workDate(day_month workDate)
+{
+    this->workDate = workDate;
+}
+
+
+tm& WorkingHours::get_arriveTime()
+{
+    return arriveTime;
+}
+
+void WorkingHours::set_arriveTime(tm arriveTime)
+{
+    this->arriveTime = arriveTime;
+}
+
+tm& WorkingHours::get_finishTime()
+{
+    return finishTime;
+}
+
+void WorkingHours::set_finishTime(tm finishTime)
+{
+    this->finishTime = finishTime;
+}
+
 tm WorkingHours::calcTimeSpanWorking()
 {
     tm time_diff;
-    time_diff.tm_hour = finishTime.tm_hour - arriveTime.tm_hour;
-    time_diff.tm_min = finishTime.tm_min - arriveTime.tm_min;
+    time_diff.tm_hour = get_finishTime().tm_hour - get_arriveTime().tm_hour;
+    time_diff.tm_min = get_finishTime().tm_min - get_arriveTime().tm_min;
 
     if (time_diff.tm_min < 0)
     {
         time_diff.tm_hour--;
         time_diff.tm_min = 60 + time_diff.tm_min;
     }
-    
 
     return  time_diff;
 }
@@ -78,9 +154,9 @@ istream& operator>>(istream& is, WorkingHours& obj)
         return is;
     }
 
-    obj.workDate = date;
-    obj.arriveTime = arrive_time;
-    obj.finishTime = depart_time;
+    obj.set_workDate(date);
+    obj.set_arriveTime(arrive_time);
+    obj.set_finishTime(depart_time);
 
     return is;
 }
@@ -96,6 +172,17 @@ day_month WorkingHours::validate_str_date(string str_date)
         day_month date;
         date.day = stoi(matches[1].str());
         date.month = stoi(matches[2].str());
+
+        if (date.day > 31 || date.day < 1)
+        {
+            throw invalid_argument("incorrect values for day");
+        }
+
+        if (date.month > 12 || date.month < 1)
+        {
+            throw invalid_argument("incorrect values for month");
+        }
+
         return date;
     }
     
@@ -113,6 +200,17 @@ tm WorkingHours::validate_str_time(string str_time)
         tm time;
         time.tm_hour = stoi(matches[1].str());
         time.tm_min = stoi(matches[2].str());
+
+        if (time.tm_hour > 24 || time.tm_hour < 0)
+        {
+            throw invalid_argument("incorrect values for hour");
+        }
+
+        if (time.tm_min >= 60 || time.tm_min < 0)
+        {
+            throw invalid_argument("incorrect values for minutes");
+        }
+        
         return time;
     }
     
@@ -125,53 +223,70 @@ void outputWorkingHoursVector(ostream& outp, vector<WorkingHours> working_hours,
 	{
 		if (human_readable)
 		{
-			outp << "Working hours (" << i+1 << "): "; 
+			outp << "Working hours " << i+1 << ": "; 
 		}
 
 		outp << working_hours[i];
 		tm time_worked = working_hours[i].calcTimeSpanWorking();
-		outp << " (" << time_worked.tm_hour << ":" << time_worked.tm_min << ")" << endl;
+		outp << " (time diff " << to_string_double_digit(time_worked.tm_hour) << ":" << to_string_double_digit(time_worked.tm_min) << ")" << endl;
 	}
 }
 
-vector<WorkingHours> readWorkingHoursVector(istream& inp, ostream& outp, bool exitOnException)
+vector<WorkingHours> readWorkingHoursVector(istream& inp, ostream& std_out, ostream& warning_stream, int objects_num, bool retryOnException)
 {
 	vector<WorkingHours> input_vec;
-	int objects_num = 0;
-	try
-	{
-		objects_num = readIntLine("Enter the number of objects: ", inp, outp, exitOnException);
-	}
-	catch(const exception& e)
-	{
-        inp.setstate(ios::failbit);
-		return input_vec;
-	}
-	
-	for (int i = 0; i < objects_num; i++)
-	{
+
+    int i = 0;
+    //i всегда будет меньше objects_num, когда objects_num не указан
+    if (objects_num < 0) 
+        i = -10;
+
+    while (i < objects_num)
+    {
 		WorkingHours working_hours;
 
 		bool read_again = false;
 		do
 		{
-			outp << "Enter working hours in format Date(dd:MM) Arriving time(hh:mm) Departure time(hh:mm):" << endl;
+			std_out << "Enter working hours in format Date(dd:MM) Arriving time(hh:mm) Departure time(hh:mm):" << endl;
 			inp >> working_hours;
 
-			if (inp.fail() ||
-				//if start time is older than finish time, it's weird
-				working_hours.arriveTime.tm_hour*60+working_hours.arriveTime.tm_min 
-				> working_hours.finishTime.tm_hour*60+working_hours.finishTime.tm_min)
+			if (inp.fail())
 			{
-				if (exitOnException) return input_vec;
+				warning_stream << "Object number: " + to_string(input_vec.size()+1) + ". There is an error in format. " << endl;
 
-				read_again = true;
+                inp.clear();
+                inp.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-				inp.clear();
-				inp.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-				outp << "Wrong format! Try again." << endl;
+                if (retryOnException)
+                {
+                    read_again = true;
+                    std_out << "Wrong format! Try again." << endl;
+                }
+                else
+                {
+                    working_hours = WorkingHours();
+                }
 			}
+            //if start time is older than finish time, it's weird
+            else if (working_hours.get_arriveTime().tm_hour*60+working_hours.get_arriveTime().tm_min 
+				> working_hours.get_finishTime().tm_hour*60+working_hours.get_finishTime().tm_min)
+            {
+				warning_stream << "Object number: " + to_string(input_vec.size()+1) + ". Starting time is older than finishing time, it doesn't make sense." << endl;
+
+                inp.clear();
+                inp.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+                if (retryOnException)
+                {
+                    read_again = true;
+                    std_out << "Starting time is older than finishing time, it doesn't make sense. Try again." << endl;
+                }
+                else
+                {
+                    working_hours = WorkingHours();
+                }
+            }
 			else
 			{
 				read_again = false;
@@ -179,6 +294,11 @@ vector<WorkingHours> readWorkingHoursVector(istream& inp, ostream& outp, bool ex
 		} while(read_again);
 		
 		input_vec.push_back(working_hours);
+
+        if (objects_num > 0)
+        {
+            i++;
+        }
 	}
 
 	return input_vec;
