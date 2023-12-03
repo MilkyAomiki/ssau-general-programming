@@ -164,7 +164,7 @@ istream& operator>>(istream& is, WorkingHours& obj)
 day_month WorkingHours::validate_str_date(string str_date)
 {
     //hours:minutes
-	regex reg_matchWorkingHoursFormat = regex(R"(^([0-9]{1,2})\.([0-9]{1,2})$)");
+	regex reg_matchWorkingHoursFormat = regex(R"(^([0-9]{2,2})\.([0-9]{2,2})$)");
     smatch matches;
 
     if(regex_search(str_date, matches, reg_matchWorkingHoursFormat))
@@ -192,7 +192,7 @@ day_month WorkingHours::validate_str_date(string str_date)
 tm WorkingHours::validate_str_time(string str_time)
 {
     //hours:minutes
-	regex reg_matchWorkingHoursFormat = regex(R"(^([0-9]{1,2}):([0-9]{1,2})$)");
+	regex reg_matchWorkingHoursFormat = regex(R"(^([0-9]{2,2}):([0-9]{2,2})$)");
     smatch matches;
 
     if(regex_search(str_time, matches, reg_matchWorkingHoursFormat))
