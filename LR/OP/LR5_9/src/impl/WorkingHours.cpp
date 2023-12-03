@@ -6,8 +6,10 @@
 #include "../WorkingHours.h"
 #include "../IoExtensions.h"
 #include "../StringExtensions.h"
+#include <limits>
 
 using namespace std;
+
 
 WorkingHours::WorkingHours(const day_month* workDate, const tm* arriveTime, const tm* finishTime)
 {
@@ -101,6 +103,8 @@ tm WorkingHours::calcTimeSpanWorking()
     return  time_diff;
 }
 
+string WH_LAST_READ_ERROR;
+
 ostream& operator<<(ostream& os, const WorkingHours& obj)
 {
     os << to_string_double_digit(obj.workDate.day) << "." << to_string_double_digit(obj.workDate.month) << " ";
@@ -125,6 +129,7 @@ istream& operator>>(istream& is, WorkingHours& obj)
     catch(invalid_argument e)
     {
         is.setstate(ios::failbit);
+        WH_LAST_READ_ERROR = "Field 'Date' - format is invalid";
         return is;
     }
 
@@ -138,6 +143,7 @@ istream& operator>>(istream& is, WorkingHours& obj)
     catch(invalid_argument e)
     {
         is.setstate(ios::failbit);
+        WH_LAST_READ_ERROR = "Field 'Arrive time' - format is invalid";
         return is;
     }
 
@@ -151,6 +157,7 @@ istream& operator>>(istream& is, WorkingHours& obj)
     catch(invalid_argument e)
     {
         is.setstate(ios::failbit);
+        WH_LAST_READ_ERROR = "Field 'Finish time' - format is invalid";
         return is;
     }
 
@@ -217,24 +224,31 @@ tm WorkingHours::validate_str_time(string str_time)
     throw invalid_argument("");
 }
 
-void outputWorkingHoursVector(ostream& outp, vector<WorkingHours> working_hours, bool human_readable)
+void outputWorkingHoursVector(ostream& outp, WorkingHoursListInput working_hours_res, bool human_readable)
 {
-	for (int i = 0; i < working_hours.size(); i++)
+	for (int i = 0; i < working_hours_res.workingHours.size(); i++)
 	{
 		if (human_readable)
 		{
 			outp << "Working hours " << i+1 << ": "; 
 		}
 
-		outp << working_hours[i];
-		tm time_worked = working_hours[i].calcTimeSpanWorking();
-		outp << " (time diff " << to_string_double_digit(time_worked.tm_hour) << ":" << to_string_double_digit(time_worked.tm_min) << ")" << endl;
+		outp << working_hours_res.workingHours[i];
+		tm time_worked = working_hours_res.workingHours[i].calcTimeSpanWorking();
+		outp << " (time diff " << to_string_double_digit(time_worked.tm_hour) << ":" << to_string_double_digit(time_worked.tm_min) << ")";
+        
+        if (working_hours_res.whInputErrors.count(i))
+        {
+            outp << " | Error: " << working_hours_res.whInputErrors[i];
+        }
+
+        outp << endl;
 	}
 }
 
-vector<WorkingHours> readWorkingHoursVector(istream& inp, ostream& std_out, ostream& warning_stream, int objects_num, bool retryOnException)
+WorkingHoursListInput readWorkingHoursVector(istream& inp, ostream& std_out, ostream& warning_stream, int objects_num, bool retryOnException)
 {
-	vector<WorkingHours> input_vec;
+    WorkingHoursListInput result;
 
     int i = 0;
     //i всегда будет меньше objects_num, когда objects_num не указан
@@ -253,15 +267,16 @@ vector<WorkingHours> readWorkingHoursVector(istream& inp, ostream& std_out, ostr
 
 			if (inp.fail())
 			{
-				warning_stream << "Object number: " + to_string(input_vec.size()+1) + ". There is an error in format. " << endl;
+				warning_stream << "Object number: " + to_string(result.workingHours.size()+1) + ". There is an error in format. " << endl;
+                result.whInputErrors[i] = WH_LAST_READ_ERROR;
 
                 inp.clear();
-                inp.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                inp.ignore(numeric_limits<streamsize>::max(), '\n');
 
                 if (retryOnException)
                 {
                     read_again = true;
-                    std_out << "Wrong format! Try again." << endl;
+                    std_out << WH_LAST_READ_ERROR << ". Try again." << endl;
                 }
                 else
                 {
@@ -272,7 +287,10 @@ vector<WorkingHours> readWorkingHoursVector(istream& inp, ostream& std_out, ostr
             else if (working_hours.get_arriveTime().tm_hour*60+working_hours.get_arriveTime().tm_min 
 				> working_hours.get_finishTime().tm_hour*60+working_hours.get_finishTime().tm_min)
             {
-				warning_stream << "Object number: " + to_string(input_vec.size()+1) + ". Starting time is older than finishing time, it doesn't make sense." << endl;
+                const string error_text = "Starting time is older than finishing time, it doesn't make sense.";
+				warning_stream << "Object number: " + to_string(result.workingHours.size()+1) + ". " << error_text << endl;
+
+                result.whInputErrors[i] = error_text;
 
                 inp.clear();
                 inp.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -280,7 +298,7 @@ vector<WorkingHours> readWorkingHoursVector(istream& inp, ostream& std_out, ostr
                 if (retryOnException)
                 {
                     read_again = true;
-                    std_out << "Starting time is older than finishing time, it doesn't make sense. Try again." << endl;
+                    std_out << error_text << " Try again." << endl;
                 }
                 else
                 {
@@ -293,7 +311,7 @@ vector<WorkingHours> readWorkingHoursVector(istream& inp, ostream& std_out, ostr
 			}
 		} while(read_again);
 		
-		input_vec.push_back(working_hours);
+		result.workingHours.push_back(working_hours);
 
         if (objects_num > 0)
         {
@@ -301,5 +319,5 @@ vector<WorkingHours> readWorkingHoursVector(istream& inp, ostream& std_out, ostr
         }
 	}
 
-	return input_vec;
+	return result;
 }

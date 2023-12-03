@@ -1,6 +1,7 @@
 #include <vector>
 #include <istream>
 #include <ostream>
+#include <unordered_map>
 
 using namespace std;
 
@@ -36,8 +37,8 @@ class WorkingHours
 		//Время ухода (чч:мм)
 		tm finishTime;
 	public:
-		WorkingHours::WorkingHours(const day_month* workDate = nullptr, const tm* arriveTime = nullptr, const tm* finishTime = nullptr);
-		WorkingHours::WorkingHours(const WorkingHours& obj);
+		WorkingHours(const day_month* workDate = nullptr, const tm* arriveTime = nullptr, const tm* finishTime = nullptr);
+		WorkingHours(const WorkingHours& obj);
 
 		day_month& get_workDate();
 		void set_workDate(day_month workDate);
@@ -55,6 +56,13 @@ class WorkingHours
 		friend istream& operator>>(istream& is, WorkingHours& obj);
 };
 
+struct WorkingHoursListInput
+{
+	vector<WorkingHours> workingHours;
+	unordered_map<int, string> whInputErrors;
+};
+
+extern string WH_LAST_READ_ERROR;
 ostream& operator<<(ostream& os, const WorkingHours& obj);
 istream& operator>>(istream& is, WorkingHours& obj);
 
@@ -62,13 +70,13 @@ istream& operator>>(istream& is, WorkingHours& obj);
 /// @param outp any output stream
 /// @param working_hours the vector of working hours
 /// @param human_readable whether to append human readable text or not
-void outputWorkingHoursVector(ostream& outp, vector<WorkingHours> working_hours, bool human_readable);
+void outputWorkingHoursVector(ostream& outp, WorkingHoursListInput working_hours, bool human_readable);
 
 /// @brief reads vector of working hours from input stream
 /// @param inp an input stream
 /// @param outp output stream to which human redable text would be outputed 
 /// @param exitOnException whether to stop reading if error in formatting of data is found. throws exceptions with readable descriptionif errors occur
 /// @return successfuly read vector of working hours
-vector<WorkingHours> readWorkingHoursVector(istream& inp, ostream& std_out, ostream& warning_stream, int objects_num = -1, bool retryOnException = false);
+WorkingHoursListInput readWorkingHoursVector(istream& inp, ostream& std_out, ostream& warning_stream, int objects_num = -1, bool retryOnException = false);
 
 #endif

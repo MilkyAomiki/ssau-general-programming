@@ -1,4 +1,5 @@
 #include <iostream>
+#include <climits>
 using namespace std;
 
 #ifndef IOREAD_H
@@ -13,6 +14,8 @@ using namespace std;
 /// @param minValue Минимально разрешенное значение вводимого числа
 /// @return Успешно сконвертированное число
 int readIntLine(string messageBefore, istream& inps, ostream& outs, bool exitOnException = true, int maxValue = INT_MAX, int minValue = INT_MIN);
+
+int countLines(istream& inps);
 
 /// @brief Спрашивает продолжить ли выполнение программы
 /// @return true если да, false иначе

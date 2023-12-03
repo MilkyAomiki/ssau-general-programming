@@ -49,6 +49,16 @@ int readIntLine(string messageBefore, istream& inps, ostream& outs, bool exitOnE
 	return result;
 }
 
+int countLines(istream &inps)
+{
+	int number_of_lines = 0;
+	string line;
+	while (getline(inps, line))
+		++number_of_lines;
+
+	return number_of_lines;
+}
+
 bool askWhetherToContinue()
 {
 	string str_doContinue;

@@ -5,6 +5,7 @@
 
 #include "src/WorkingHours.h"
 #include "src/IoExtensions.h"
+#include <climits>
 
 using namespace std;
 
@@ -25,32 +26,28 @@ int main()
 		numberEntered = readIntLine("Choose number: ", cin, cout, false, 2, 1);
 		cout << endl;
 
-		vector<WorkingHours> workingHours;
+		WorkingHoursListInput workingHoursRes;
 		bool continue_execution = true;
 		if (numberEntered == 1) //Читаем из консоли
 		{
 			int objects_num = 0;
 
 			objects_num = readIntLine("Enter the number of objects: ", cin, cout, false, INT_MAX, 1);
-			workingHours = readWorkingHoursVector(cin, cout, dummy_output, objects_num, true);
+			workingHoursRes = readWorkingHoursVector(cin, cout, dummy_output, objects_num, true);
 		}
 		else if (numberEntered == 2) //Читаем из файла
 		{
 			ifstream ifout;
 			ifout.open("input.txt");
-
-			int number_of_lines = 0;
-			std::string line;
-			while (std::getline(ifout, line))
-				++number_of_lines;
+			int number_of_lines = countLines(ifout);
 			ifout.close();
-			ifout.open("input.txt");
 
+			ifout.open("input.txt");
 			try
 			{
-				workingHours = readWorkingHoursVector(ifout, dummy_output, cout, number_of_lines, false);
+				workingHoursRes = readWorkingHoursVector(ifout, dummy_output, cout, number_of_lines, false);
 			}
-			catch(const std::exception& e)
+			catch(const exception& e)
 			{
 				cout << "Error: couldn't read file with the following error: '" << e.what() << "'" << endl;
 				continue_execution = false;
@@ -58,10 +55,9 @@ int main()
 
 			if (ifout.fail() && continue_execution)
 			{
-				cout << "Error: couldn't read file, wrong format. (succesfully read: " << workingHours.size() << " objects)" << endl;
+				cout << "Error: couldn't read file, wrong format. (succesfully read: " << workingHoursRes.workingHours.size() << " objects)" << endl;
 				continue_execution = false;
 			}
-
 			ifout.close();
 		}
 
@@ -76,13 +72,13 @@ int main()
 
 			if (numberEntered == 1) //Выводим в консоль
 			{
-				outputWorkingHoursVector(cout, workingHours, true);
+				outputWorkingHoursVector(cout, workingHoursRes, true);
 			}
 			else if (numberEntered == 2) //Выводим в файл
 			{
 				ofstream ofout;
 				ofout.open("output.txt");
-				outputWorkingHoursVector(ofout, workingHours, false);
+				outputWorkingHoursVector(ofout, workingHoursRes, false);
 
 				ofout.close();
 			}
