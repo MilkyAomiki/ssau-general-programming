@@ -15,6 +15,14 @@ using namespace std;
 /// @return Успешно сконвертированное число
 int readIntLine(string messageBefore, istream& inps, ostream& outs, bool exitOnException = true, int maxValue = INT_MAX, int minValue = INT_MIN);
 
+/// @brief shows greetingText to user, then reads entered number of type double
+/// @return entered double
+double readDouble(string greetingText);
+
+/// @brief shows greetingText to user, then reads entered number of type double
+/// @return entered double
+double readDoubleBetween0and1(string greetingText);
+
 int countLines(istream& inps);
 
 /// @brief Спрашивает продолжить ли выполнение программы

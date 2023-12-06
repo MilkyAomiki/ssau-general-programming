@@ -36,7 +36,7 @@
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "${workspaceFolder}/shared/impl/*.cpp",
-                "${workspaceFolder}/*.cpp"
+                "${file}"
             ],
             "options": {
                 "cwd": "${fileDirname}"

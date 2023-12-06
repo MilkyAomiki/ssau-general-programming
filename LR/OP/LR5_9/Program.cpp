@@ -6,6 +6,7 @@
 #include "src/WorkingHours.h"
 #include "src/IoExtensions.h"
 #include <climits>
+#include <limits>
 
 using namespace std;
 
@@ -34,6 +35,9 @@ int main()
 
 			objects_num = readIntLine("Enter the number of objects: ", cin, cout, false, INT_MAX, 1);
 			workingHoursRes = readWorkingHoursVector(cin, cout, dummy_output, objects_num, true);
+
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
 		else if (numberEntered == 2) //Читаем из файла
 		{

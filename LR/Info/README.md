@@ -1,8 +1,8 @@
 # Лабы по Информатике ПМИ 1 курс
 
-## Задания, вариант 22
+## Задания
 
-### ЛР 1
+## ЛР 1 (вариант 22)
 
 ### Скатерть Улама и треугольник Клаубера
 
@@ -35,62 +35,111 @@ Continue? (Y/N)>N
 
 ```
 
-### ЛР 2
+## ЛР 2 (вариант 6)
 
-### Два сплава
+### Система линейных алгебраических уравнений
 
-Имеется два сплава из двух металлов, соотношение этих металлов
-в каждом из сплавов **известно**. Программа должна определять, какое
-количество объёмных единиц первого и второго сплава нужно взять,
-чтобы получить третий сплав с заданным соотношением этих
-металлов.
+Программа должна решать систему линейных алгебраических
+уравнений вида
 
-**Входные данные**. Соотношение двух металлов в первом сплаве,
-во втором сплаве и в требуемом сплаве, а также количество объёмных
-единиц третьего сплава, которое требуется получить.
-**Выходные данные**. Количество объёмных единиц первого и
-второго сплава, которые следует соединить, для получения заданного
-количества третьего сплава, либо сообщение о том, что получить
-третий сплав из имеющихся двух невозможно.
+``` bash
+| a_11x_1+a_12x_2 = b_1;
+| a_21x_1+a_22x_2 = b_2;
+```
+
+**Входные данные.** Целые числа a_ij и b_i.
+**Выходные данные.** Все возможные пары значений x_1 и x_2,
+удовлетворяющие обоим уравнениям системы, либо сообщение о том,
+что таких пар бесконечно много.
+
+``` bash
+System of linear equations solver
+Input a(1, 1)>1
+Input a(1, 2)>2
+Input a(2, 1)>3
+Input a(2, 2)>4
+Input b(1)>5
+Input b(2)>6
+Solution: (-4.0, 4.5)
+Continue? (Y/N)>Y
+Input a(1, 1)>1
+Input a(1, 2)>2
+Input a(2, 1)>2
+Input a(2, 2)>4
+Input b(1)>3
+Input b(2)>3
+No solution
+Continue? (Y/N)>N
+```
+
+## ЛР 3 (Вариант 29)
+
+### Калькулятор матриц
+
+Состоянием программы является матрица размером `2×2`,
+элементами которой являются дробные числа.
+
+Программа должна позволять пользователю складывать эту матрицу с другими матрицами такого же размера и умножать эту матрицу на другие матрицы такого же размера, изменяя при этом своё состояние.
+
+Программа должна визуализировать результат каждой операции.
+
+**Входные данные**. Операции с текущей матрицей и квадратные
+матрицы из дробных чисел, с которыми нужно выполнять эти
+операции.
+113
+**Выходные данные**. Состояние матрицы после каждой операции.
 
 Пример текстового интерфейса пользователя
 
 ``` bash
-Alloys volume calculator
-Input a proportion in the first alloy>0.25
-Input a proportion in the second alloy>4.0
-Input a required proportion>1.0
-Input a required volume>1000
-Volume of the first alloy: 500.0
-Volume of the second alloy: 500.0
+Matrix calculator
+Current state:
+0.0 0.0
+0.0 0.0
+Input an operation (+/*)>+
+Input an operand
+Input the element #(1, 1)>1.5
+Input the element #(1, 2)>2.5
+Input the element #(2, 1)>3.5
+Input the element #(2, 2)>4.5
+Current state:
+1.5 2.5
+3.5 4.5
 Continue? (Y/N)>Y
-66
-Input a proportion in the first alloy>0.5
-Input a proportion in the second alloy>2.0
-Input a required proportion>0.666666666666666
-Input a required volume>1.5
-Volume of the first alloy: 1.2
-Volume of the second alloy: 0.3
+Input an operation (+/*)>*
+Input an operand
+Input the element #(1, 1)>5
+Input the element #(1, 2)>6
+Input the element #(2, 1)>7
+Input the element #(2, 2)>8
+Current state:
+25.0 29.0
+49.0 57.0
 Continue? (Y/N)>N
 ```
 
-p.s.
+## ЛР 4 (Вариант 24)
 
-``` c++
-a* ratio1 + b*ratio2 = c*ratio3
-a + b = c
+### Копирование файлов
 
-c*ratio1-b*ratio1 + b*ratio2 = c*ratio3
-a = c-b
+Программа должна создавать новый файл с заданным именем,
+содержимое которого полностью совпадает с содержимым другого
+файла с заданным именем.
 
-b*ratio2 - b*ratio1 = c*ratio3 - c*ratio1
-a = c-b
+**Входные данные**. Исходный файл, заданный своим именем, а
+также имя нового файла.
+**Выходные данные**. Копия исходного файла с заданным именем.
 
-b*(ratio2 - ratio1) = c*(ratio3 - ratio1)
-a = c-b
+Пример текстового интерфейса пользователя
 
-ratio1 + b*ratio2/a = ratio3/a
-ratio1/b + ratio2/a = ratio3/a*b
-
-500*0.25 + 4*500 = 
+``` bash
+File copy
+Input a source filename>The Jungle Book.txt
+Input a destination filename>The Jungle Book (1).txt
+Operation has been completed successfully
+Continue? (Y/N)>Y
+Input a source filename>Jane Eyre.txt
+Input a destination filename>Jane Eyre (1).txt
+Operation has been completed successfully
+Continue? (Y/N)>N
 ```
