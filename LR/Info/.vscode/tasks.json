@@ -11,8 +11,8 @@
                 "/Fe${fileDirname}\\out\\${fileBasenameNoExtension}.exe",
                 "/Fo${workspaceFolder}\\out\\obj\\",
                 "/Fd${workspaceFolder}\\out\\pdb\\",
-                "${workspaceFolder}\\src\\impl\\*.cpp",
-                "${workspaceFolder}\\*.cpp"
+                "${workspaceFolder}\\shared\\impl\\*.cpp",
+                "${file}"
             ],
             "options": {
                 "cwd": "${fileDirname}"
