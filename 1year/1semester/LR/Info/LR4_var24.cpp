@@ -16,14 +16,6 @@ struct matrix
     double a_r2c2 = 0;
 };
 
-void print_matrix(matrix m)
-{
-    cout << "┌" << "\t" << " " << "\t" << " " << "\t" << "┐" << endl;
-    cout << "│" << "\t" << m.a_r1c1 << "\t" << m.a_r1c2 << "\t" << "│" << endl;
-    cout << "│" << "\t" << m.a_r2c1 << "\t" << m.a_r2c2 << "\t" << "│" << endl;
-    cout << "└" << "\t" << " " << "\t" << " " << "\t" << "┘" << endl;
-}
-
 void copy_file(string source_filename, string dest_filename)
 {  
     ifstream ifout;

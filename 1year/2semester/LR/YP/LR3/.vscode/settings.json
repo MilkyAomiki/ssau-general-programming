@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "array": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "span": "cpp",
+        "new": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "format": "cpp",
+        "initializer_list": "cpp",
+        "chrono": "cpp",
+        "fstream": "cpp",
+        "tuple": "cpp"
+    }
+}
