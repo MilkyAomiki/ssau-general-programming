@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "chrono": "cpp",
+        "functional": "cpp",
+        "new": "cpp",
+        "fstream": "cpp",
+        "*.tcc": "cpp",
+        "list": "cpp"
+    }
+}

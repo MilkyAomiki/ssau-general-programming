@@ -1,0 +1,2 @@
+remove left: ^\|[^|]+\|
+remove right: [| ]+$

@@ -1,0 +1,3 @@
+if[kw] a[id] >[co] 7[vl] and[kw] b[id] <[co] 10[vl] then[kw] b[id] =[eq] a[id] /[ao] 5[vl] *[ao] 10[vl] end[kw] 
+a b b a 
+7 10 5 10 

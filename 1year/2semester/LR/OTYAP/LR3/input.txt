@@ -1,0 +1,4 @@
+if a>7 and b<10
+then
+b=a/5*10
+end

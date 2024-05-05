@@ -71,6 +71,11 @@ bool is_separator(unsigned char c)
     return isspace(c) || c == '\0';
 }
 
+bool is_arithmetic_operation(unsigned char c)
+{
+    return c == '+' || c == '-' || c == '*' || c == '/';
+}
+
 /// @brief Конверитрует символ в его представление в enum символов
 /// @param s символ
 /// @return значение в enum символов
@@ -82,7 +87,7 @@ symbol char_to_symbol(unsigned char s)
     if (s == '<') return less_co;
     if (s == '>') return more_co;
     if (s == '=') return eq;
-    if (s == '+' || s == '-') return arithm;
+    if (is_arithmetic_operation(s)) return arithm;
     return other;
 }
 
@@ -131,9 +136,9 @@ struct lex
     const char* lex_type;
 };
 
-const int KW_COUNT = 4;
+const int KW_COUNT = 6;
 /// @brief Разрешенные в языке ключевые слова
-const char* keywords[KW_COUNT] =  { "if", "else", "then", "end" };
+const char* keywords[KW_COUNT] =  { "if", "else", "then", "end", "and", "or" };
 
 /// @brief Проводит лексический анализ над текстом
 /// @param text Текст
@@ -142,13 +147,14 @@ vector<lex>* analyze_lexems(unsigned char* text)
 {
     vector<lex>* lexems = new vector<lex>();
     enum state curr_state = s_begin;
-    int i = 0, lex_begin_i = 0;
+    int i = 0, lex_begin_i = 0, const_count = 0;
 
     do
     {
         if (curr_state == s_begin)
         {
             lex_begin_i = i;
+            const_count = 0;
         }
 
         curr_state = state_table[char_to_symbol(text[i])][curr_state];
@@ -168,13 +174,31 @@ vector<lex>* analyze_lexems(unsigned char* text)
             //Проверяем, является ли найденная лексема ключевым словом
             if (curr_state == s_final_id)
             {
-                for (int i = 0; i < KW_COUNT; i++)
+                int i = 0;
+                for (; i < KW_COUNT; i++)
                 {
                     if (!strcmp((char*)lexem.str, keywords[i]))
                     {
                         lexem.lex_type = KW;
                         break;
                     }
+                }
+
+                //если не ключевое слово - 
+                if (i >= KW_COUNT)
+                {
+                    if (strlen((char*)lexem.str) > 5)
+                    {
+                        lexem.lex_type = WL;   
+                    }
+                }
+            }
+            
+            if (curr_state == s_final_const)
+            {   
+                if (const_count > 5 || (const_count == 5 && atoi((char*)lexem.str) > 32768))
+                {
+                    lexem.lex_type = WL;
                 }
             }
 
@@ -184,6 +208,10 @@ vector<lex>* analyze_lexems(unsigned char* text)
             //чтобы текущий символ стал символом для начального состояния на некст автомате
             i--;
         }
+
+        if (curr_state == s_const)
+            const_count++;
+        
     }
     while (text[i++]);
 
