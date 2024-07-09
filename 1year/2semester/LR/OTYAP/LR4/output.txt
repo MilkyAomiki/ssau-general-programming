@@ -1,2 +1,2 @@
-if[if] -[ao] 2[vl] >[co] 0[vl] then[th] a[id] =[eq] -[ao] 32768[vl] else[el] a[id] =[eq] -[ao] 32799[vl] end[en] 
+if[if] -[ao] 2[vl] >[co] 0[vl] then[th] a[id] =[eq] -[ao] 32768[vl] else[el] a[id] =[eq] -[ao] 32799[wl] end[en] 
 14 vl

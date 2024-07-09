@@ -1,0 +1,22 @@
+{
+    "files.associations": {
+        "iosfwd": "cpp",
+        "new": "cpp",
+        "*.tcc": "cpp",
+        "chrono": "cpp",
+        "vector": "cpp",
+        "functional": "cpp",
+        "random": "cpp",
+        "format": "cpp",
+        "array": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "span": "cpp",
+        "fstream": "cpp",
+        "memory_resource": "cpp",
+        "limits": "cpp",
+        "optional": "cpp",
+        "variant": "cpp",
+        "cmath": "cpp"
+    }
+}

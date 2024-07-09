@@ -361,7 +361,10 @@ syntax_analysis_res analyze_syntax(vector<lex>& lexems)
                 vl = -vl;
 
             if (vl < -32768 || vl > 32767)
+            {
+                lexems[i].lex_type = "wl";
                 curr_state = s_final_const;   
+            }
         }
 
         if (is_syntax_final_state(curr_state))
