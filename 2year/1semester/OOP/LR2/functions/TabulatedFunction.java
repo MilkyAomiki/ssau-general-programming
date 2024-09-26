@@ -7,7 +7,8 @@ public class TabulatedFunction {
     public TabulatedFunction(double leftX, double rightX, int pointsCount) {
         double step = (rightX - leftX) / pointsCount;
 
-        points = new FunctionPoint[pointsCount];
+        setSize(pointsCount);
+        points = new FunctionPoint[getSize()*2];
         double current = leftX;
         int i = 0;
         while (current <= rightX) {
@@ -20,8 +21,9 @@ public class TabulatedFunction {
 
     public TabulatedFunction(double leftX, double rightX, double[] values) {
         double step = (rightX - leftX) / (values.length-1);
-
-        points = new FunctionPoint[values.length];
+        
+        setSize(values.length);
+        points = new FunctionPoint[getSize() * 2];
         double current = leftX;
         int i = 0;
         while (current <= rightX) {
@@ -32,23 +34,31 @@ public class TabulatedFunction {
         }
     }
 
+    private int getSize()
+    {
+        return size;
+    }
+
+    private void setSize(int s)
+    {
+        size = s;
+    }
+
+    private void resize()
+    {
+        FunctionPoint[] newArr = new FunctionPoint[points.length*2];
+        System.arraycopy(points, 0, newArr, 0, points.length);
+        points = newArr;
+    }
+
     public void deletePoint(int index)
     {
-        FunctionPoint[] newArr = new FunctionPoint[points.length-1];
-
-        if (index != 0) {
-            System.arraycopy(points, 0, newArr, 0, index);
-        }
-
-        System.arraycopy(points, index+1, newArr, index, points.length - index-1);
-
-        points = newArr;
+        System.arraycopy(points, index+1, points, index, getSize() - index-1);
+        setSize(getSize()-1);
     }
 
     public void addPoint(FunctionPoint point)
     {
-        FunctionPoint[] newArr = new FunctionPoint[points.length+1];
-
         int index = 0;
         for (; index < points.length; index++) {
             if (isXInInterval(index, point.getX())) {
@@ -64,22 +74,21 @@ public class TabulatedFunction {
             }
         }
 
-        if (index != 0) {
-            System.arraycopy(points, 0, newArr, 0, index);
+        if (getSize()+1 == points.length) {
+            resize();
         }
 
-        if (index != points.length) {
-            System.arraycopy(points, index, newArr, index+1, points.length - index);
+        if (index != getSize()) {
+            System.arraycopy(points, index, points, index+1, getSize() - index);
         }
 
-        newArr[index] = new FunctionPoint(point);
-
-        points = newArr;
+        points[index] = new FunctionPoint(point);
+        setSize(getSize()+1);
     }
 
     public double getLeftDomainBorder()
     {
-        if (points.length > 0) {
+        if (getSize() > 0) {
             return getLeftmost().getX();
         }
 
@@ -88,7 +97,7 @@ public class TabulatedFunction {
 
     public double getRightDomainBorder()
     {
-        if (points.length > 0) {
+        if (getSize() > 0) {
             return getRightmost().getX();
         }
 
@@ -97,7 +106,7 @@ public class TabulatedFunction {
 
     public int getPointsCount()
     {
-        return points.length;
+        return getSize();
     }
 
     public FunctionPoint getPoint(int index)
@@ -157,7 +166,7 @@ public class TabulatedFunction {
 
     private FunctionPoint getRightmost()
     {
-        return points[points.length-1];
+        return points[getSize()-1];
     }
 
     private boolean isXInInterval(int index, double x)
@@ -169,7 +178,7 @@ public class TabulatedFunction {
             leftX = points[index-1].getX();
         }
 
-        if (index < points.length-1) {
+        if (index < getSize()-1) {
             rightX = points[index+1].getX();
         }
 
