@@ -5,36 +5,46 @@ public class TabulatedFunction {
     private int size = 0;
 
     public TabulatedFunction(double leftX, double rightX, int pointsCount) {
-        double step = (rightX - leftX) / pointsCount;
+        if (leftX >= rightX) {
+            throw new IllegalArgumentException("Left border should be smaller than the right one");
+        }
 
+        if (pointsCount < 2) {
+            throw new IllegalArgumentException("The number of points should not be less than 2");
+        }
+
+        double step = (rightX - leftX) / pointsCount;
+        
         setSize(pointsCount);
         points = new FunctionPoint[getSize()*2];
-
-        //заполняем points
         double current = leftX;
         int i = 0;
         while (current <= rightX) {
             points[i] = new FunctionPoint(current, 0);
 
-            //переходим на след шаг
             current += step;
             i++;
         }
     }
 
     public TabulatedFunction(double leftX, double rightX, double[] values) {
+        if (leftX >= rightX) {
+            throw new IllegalArgumentException("Left border should be smaller than the right one");
+        }
+
+        if (values.length < 2) {
+            throw new IllegalArgumentException("The number of points should not be less than 2");
+        }
+
         double step = (rightX - leftX) / (values.length-1);
         
         setSize(values.length);
         points = new FunctionPoint[getSize() * 2];
-
-        //заполняем points
         double current = leftX;
         int i = 0;
         while (current <= rightX) {
             points[i] = new FunctionPoint(current, values[i]);
-            
-            //переходим на след шаг
+
             current += step;
             i++;
         }
@@ -50,9 +60,6 @@ public class TabulatedFunction {
         size = s;
     }
 
-    /**
-     * Расширение массива points в два раза
-     */
     private void resize()
     {
         FunctionPoint[] newArr = new FunctionPoint[points.length*2];
@@ -62,22 +69,23 @@ public class TabulatedFunction {
 
     public void deletePoint(int index)
     {
+        if (index < 0 || index >= getSize()) {
+            throw new FunctionPointIndexOutOfBoundsException();
+        }
+
         System.arraycopy(points, index+1, points, index, getSize() - index-1);
         setSize(getSize()-1);
     }
 
     public void addPoint(FunctionPoint point)
     {
-        //ищем index на который поставить значение
         int index = 0;
         for (; index < points.length; index++) {
             if (isXInInterval(index, point.getX())) {
-                //уже есть данный x в таблице, не можем добавить 
                 if (points[index].getX() == point.getX()) {
                     return;
                 }
 
-                //решаем куда встать - до index или после него
                 if (points[index].getX() < point.getX()) {
                     index++;
                 }
@@ -90,7 +98,6 @@ public class TabulatedFunction {
             resize();
         }
 
-       //сдвигаем значения чтобы освободить ячейку 
         if (index != getSize()) {
             System.arraycopy(points, index, points, index+1, getSize() - index);
         }
@@ -124,11 +131,19 @@ public class TabulatedFunction {
 
     public FunctionPoint getPoint(int index)
     {
+        if (index < 0 || index >= getSize()) {
+            throw new FunctionPointIndexOutOfBoundsException();
+        }
+
         return new FunctionPoint(points[index]);
     }
 
     public void setPoint(int index, FunctionPoint point)
     {
+        if (index < 0 || index >= getSize()) {
+            throw new FunctionPointIndexOutOfBoundsException();
+        }
+
         if (isXInInterval(index, point.getX())) {
             points[index] = new FunctionPoint(point);
         }
@@ -136,23 +151,43 @@ public class TabulatedFunction {
 
     public double getPointX(int index)
     {
+        if (index < 0 || index >= getSize()) {
+            throw new FunctionPointIndexOutOfBoundsException();
+        }
+
         return points[index].getX();
     }
 
     public void setPointX(int index, double x)
     {
+        if (index < 0 || index >= getSize()) {
+            throw new FunctionPointIndexOutOfBoundsException();
+        }
+
         if (isXInInterval(index, x)) {
             points[index].setX(x);
+        }
+        else
+        {
+            throw new InappropriateFunctionPointException();
         }
     }
 
     public double getPointY(int index)
     {
+        if (index < 0 || index >= getSize()) {
+            throw new FunctionPointIndexOutOfBoundsException();
+        }
+
         return points[index].getY();
     }
 
     public void setPointY(int index, double y)
     {
+        if (index < 0 || index >= getSize()) {
+            throw new FunctionPointIndexOutOfBoundsException();
+        }
+
         points[index].setY(y);
     }
 
@@ -161,7 +196,6 @@ public class TabulatedFunction {
         if (x < getLeftDomainBorder() || x > getRightDomainBorder())
             return Double.NaN;
 
-        //линейная интерполяция
         double x2 = getRightmost().getX();
         double y2 = getRightmost().getY();
 
@@ -183,24 +217,15 @@ public class TabulatedFunction {
         return points[getSize()-1];
     }
 
-    /**
-     * Проверяет является ли данный x, на данном y, в массиве points, больше левого значения и меньше правого
-     * @param index индекс в массиве points
-     * @param x 
-     * @return
-     */
     private boolean isXInInterval(int index, double x)
     {
-        //значения по умолчанию всегда дают true
         double leftX = x-1;
         double rightX = x+1;
 
-        //если есть левая граница - ставим ее
         if (index > 0) {
             leftX = points[index-1].getX();
         }
 
-        //если есть правая граница - ставим ее
         if (index < getSize()-1) {
             rightX = points[index+1].getX();
         }
