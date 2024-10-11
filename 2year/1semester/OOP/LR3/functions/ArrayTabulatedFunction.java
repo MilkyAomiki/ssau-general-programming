@@ -1,12 +1,20 @@
 package functions;
 
-public class TabulatedFunction {
+public class ArrayTabulatedFunction implements TabulatedFunction {
     private FunctionPoint[] points;
     private int size = 0;
 
-    public TabulatedFunction(double leftX, double rightX, int pointsCount) {
-        double step = (rightX - leftX) / pointsCount;
+    public ArrayTabulatedFunction(double leftX, double rightX, int pointsCount) {
+        if (leftX >= rightX) {
+            throw new IllegalArgumentException("Left border (" + leftX +") should be smaller than the right one (" + rightX + ")");
+        }
 
+        if (pointsCount < 2) {
+            throw new IllegalArgumentException("The number of points should not be less than 2");
+        }
+
+        double step = (rightX - leftX) / pointsCount;
+        
         setSize(pointsCount);
         points = new FunctionPoint[getSize()*2];
 
@@ -22,7 +30,15 @@ public class TabulatedFunction {
         }
     }
 
-    public TabulatedFunction(double leftX, double rightX, double[] values) {
+    public ArrayTabulatedFunction(double leftX, double rightX, double[] values) {
+        if (leftX >= rightX) {
+            throw new IllegalArgumentException("Left border (" + leftX +") should be smaller than the right one (" + rightX + ")");
+        }
+
+        if (values.length < 2) {
+            throw new IllegalArgumentException("The number of points should not be less than 2");
+        }
+
         double step = (rightX - leftX) / (values.length-1);
         
         setSize(values.length);
@@ -33,7 +49,7 @@ public class TabulatedFunction {
         int i = 0;
         while (current <= rightX) {
             points[i] = new FunctionPoint(current, values[i]);
-            
+
             //переходим на след шаг
             current += step;
             i++;
@@ -62,11 +78,17 @@ public class TabulatedFunction {
 
     public void deletePoint(int index)
     {
+        if (index < 0 || index >= getSize())
+            throw new FunctionPointIndexOutOfBoundsException();
+
+        if (getSize() < 3)
+            throw new IllegalStateException("Size after deletion is less than 3");
+
         System.arraycopy(points, index+1, points, index, getSize() - index-1);
         setSize(getSize()-1);
     }
 
-    public void addPoint(FunctionPoint point)
+    public void addPoint(FunctionPoint point) throws InappropriateFunctionPointException
     {
         //ищем index на который поставить значение
         int index = 0;
@@ -74,7 +96,7 @@ public class TabulatedFunction {
             if (isXInInterval(index, point.getX())) {
                 //уже есть данный x в таблице, не можем добавить 
                 if (points[index].getX() == point.getX()) {
-                    return;
+                    throw new InappropriateFunctionPointException("Given value of x " + point.getX() + " already exists with value " + points[index].getY());
                 }
 
                 //решаем куда встать - до index или после него
@@ -124,35 +146,61 @@ public class TabulatedFunction {
 
     public FunctionPoint getPoint(int index)
     {
+        if (index < 0 || index >= getSize()) {
+            throw new FunctionPointIndexOutOfBoundsException("Index " + index + " is out of bounds (0 -" + getSize() + ")");
+        }
+
         return points[index];
     }
 
-    public void setPoint(int index, FunctionPoint point)
+    public void setPoint(int index, FunctionPoint point) throws InappropriateFunctionPointException
     {
-        if (isXInInterval(index, point.getX())) {
-            points[index] = new FunctionPoint(point);
+        if (index < 0 || index >= getSize()) {
+            throw new FunctionPointIndexOutOfBoundsException("Index " + index + " is out of bounds (0 -" + getSize() + ")");
         }
+
+        if (isXInInterval(index, point.getX()))
+            points[index] = new FunctionPoint(point);
+        else
+            throw new InappropriateFunctionPointException("Provided value of x " + point.getX() + " is out of bounds at index " + index);
     }
 
     public double getPointX(int index)
     {
+        if (index < 0 || index >= getSize()) {
+            throw new FunctionPointIndexOutOfBoundsException("Index " + index + " is out of bounds (0 -" + getSize() + ")");
+        }
+
         return points[index].getX();
     }
 
-    public void setPointX(int index, double x)
+    public void setPointX(int index, double x) throws InappropriateFunctionPointException
     {
-        if (isXInInterval(index, x)) {
-            points[index].setX(x);
+        if (index < 0 || index >= getSize()) {
+            throw new FunctionPointIndexOutOfBoundsException("Index " + index + " is out of bounds (0 -" + getSize() + ")");
         }
+
+        if (isXInInterval(index, x))
+            points[index].setX(x);
+        else
+            throw new InappropriateFunctionPointException("Provided value of x " + x + " is out of bounds at index " + index);
     }
 
     public double getPointY(int index)
     {
+        if (index < 0 || index >= getSize()) {
+            throw new FunctionPointIndexOutOfBoundsException("Index " + index + " is out of bounds (0 -" + getSize() + ")");
+        }
+
         return points[index].getY();
     }
 
     public void setPointY(int index, double y)
     {
+        if (index < 0 || index >= getSize()) {
+            throw new FunctionPointIndexOutOfBoundsException("Index " + index + " is out of bounds (0 -" + getSize() + ")");
+        }
+
         points[index].setY(y);
     }
 

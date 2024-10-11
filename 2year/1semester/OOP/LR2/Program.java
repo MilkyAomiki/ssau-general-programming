@@ -18,7 +18,6 @@ public class Program {
         System.out.println("1:    |"  + tabFuncLin.getFunctionValue(1));
         System.out.println("1.5:  |" + tabFuncLin.getFunctionValue(1.5));
         System.out.println("2:    |"  + tabFuncLin.getFunctionValue(2));
-        System.out.println("2:    |"  + tabFuncLin.getFunctionValue(5));
 
         
         System.out.println("___________y=5x+2(actual values)___________");
