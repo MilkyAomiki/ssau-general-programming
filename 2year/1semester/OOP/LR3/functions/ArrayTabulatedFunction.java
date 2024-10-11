@@ -79,7 +79,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
     public void deletePoint(int index)
     {
         if (index < 0 || index >= getSize())
-            throw new FunctionPointIndexOutOfBoundsException();
+            throw new FunctionPointIndexOutOfBoundsException("Index " + index + " is out of bounds (0 -" + getSize() + ")");
 
         if (getSize() < 3)
             throw new IllegalStateException("Size after deletion is less than 3");
