@@ -100,7 +100,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
                 }
 
                 //решаем куда встать - до index или после него
-                if (curr.getData().getX() < point.getX()) {
+                if (Double.compare(curr.getData().getX(), point.getX()) < 0) {
                     curr = curr.getNext();
                 }
 
@@ -341,7 +341,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
             rightX = position.getNext().getData().getX();
         }
 
-        if (leftX < x && x < rightX) {
+        if (Double.compare(leftX, x) < 0 && Double.compare(x, rightX) < 0) {
             return true;
         }
 

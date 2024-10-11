@@ -95,12 +95,12 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
         for (; index < points.length; index++) {
             if (isXInInterval(index, point.getX())) {
                 //уже есть данный x в таблице, не можем добавить 
-                if (points[index].getX() == point.getX()) {
+                if (Double.compare(points[index].getX(), point.getX()) == 0) {
                     throw new InappropriateFunctionPointException("Given value of x " + point.getX() + " already exists with value " + points[index].getY());
                 }
 
                 //решаем куда встать - до index или после него
-                if (points[index].getX() < point.getX()) {
+                if (Double.compare(points[index].getX(), point.getX()) < 0) {
                     index++;
                 }
 
@@ -253,7 +253,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
             rightX = points[index+1].getX();
         }
 
-        if (leftX < x && x < rightX) {
+        if (Double.compare(leftX, x) < 0 && Double.compare(x, rightX) < 0) {
             return true;
         }
 
