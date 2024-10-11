@@ -210,6 +210,11 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         new_left.setNext(new_el);
         curr.setPrev(new_el);
 
+        //curr moved forward
+        if (lastAccessedNode == curr) {
+            lastAccessedIndex++;
+        }
+
         setSize(getSize()+1);
 
         return new_el;
@@ -229,6 +234,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         left.setNext(right);
         right.setPrev(left);
 
+        //right replaced curr
         if (lastAccessedNode == curr) {
             lastAccessedNode = right;
         }
