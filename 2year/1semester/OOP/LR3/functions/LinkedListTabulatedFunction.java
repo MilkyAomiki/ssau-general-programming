@@ -95,7 +95,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         while (curr != head) {
             if (isXInInterval(curr, point.getX())) {
                 //уже есть данный x в таблице, не можем добавить 
-                if (curr.getData().getX() == point.getX()) {
+                if (Double.compare(curr.getData().getX(), point.getX()) == 0) {
                     throw new InappropriateFunctionPointException("Given value of x " + point.getX() + " already exists with value " + curr.getData().getY());
                 }
 
@@ -150,6 +150,8 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         FunctionNode curr = head.getNext();
         boolean forward = true;
         int i = 0;
+        //optimizations
+        //1. for distance from last accessed node
         if (Math.abs(index - lastAccessedIndex) < index) {
             if (index > lastAccessedIndex) {
                 forward = true;
@@ -160,8 +162,18 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
             i = lastAccessedIndex;
             curr = lastAccessedNode;
         }
+        //2. for distance from 0
+        else
+        {
+            if (index <= getSize()/2) {
+                forward = true;
+            }
+            else {
+                forward = false;
+            }
+        }
 
-        while (i != index) {
+        while (Math.abs(i) != index) {
             if (forward)
             {
                 curr = curr.getNext();
