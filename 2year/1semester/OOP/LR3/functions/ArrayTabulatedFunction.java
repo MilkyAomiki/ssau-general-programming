@@ -206,7 +206,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
 
     public double getFunctionValue(double x)
     {
-        if (x < getLeftDomainBorder() || x > getRightDomainBorder())
+        if (Double.compare(x, getLeftDomainBorder()) < 0 || Double.compare(x, getRightDomainBorder()) > 0)
             return Double.NaN;
 
         //линейная интерполяция
