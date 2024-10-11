@@ -1,13 +1,12 @@
 import functions.FunctionPoint;
 import functions.FunctionPointIndexOutOfBoundsException;
 import functions.InappropriateFunctionPointException;
-import functions.ArrayTabulatedFunction;
+import functions.LinkedListTabulatedFunction;
 import functions.TabulatedFunction;
-import functions.ArrayTabulatedFunction;
 
 public class Program {
     public static void main(String[] args) {
-        TabulatedFunction tabFuncLin = new ArrayTabulatedFunction(-2, 2, new double[]{ -8, -3, 2, 7, 12 });
+        TabulatedFunction tabFuncLin = new LinkedListTabulatedFunction(-2, 2, new double[]{ -8, -3, 2, 7, 12 });
         
         
         System.out.println("___________y=5x+2___________");
@@ -31,7 +30,7 @@ public class Program {
             
         }
 
-        TabulatedFunction tabFunc = new ArrayTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
+        TabulatedFunction tabFunc = new LinkedListTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
         System.out.println("___________y=2x^3___________");
         System.out.println("x     |  y");
         System.out.println("-3:   |" + tabFunc.getFunctionValue(-3));
@@ -102,20 +101,20 @@ public class Program {
 
         System.out.println("___________constructor exceptions___________");
         try {
-            TabulatedFunction _ = new ArrayTabulatedFunction(3, -3, new double[]{ -54, -2, 2, 54 });
+            TabulatedFunction _ = new LinkedListTabulatedFunction(3, -3, new double[]{ -54, -2, 2, 54 });
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
 
 
         try {
-            TabulatedFunction _ = new ArrayTabulatedFunction(-3, 3, new double[]{ -54});
+            TabulatedFunction _ = new LinkedListTabulatedFunction(-3, 3, new double[]{ -54});
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
         
         try {
-            TabulatedFunction func = new ArrayTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
+            TabulatedFunction func = new LinkedListTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
             func.getPoint(4);
 
         } catch (FunctionPointIndexOutOfBoundsException e) {
@@ -123,7 +122,7 @@ public class Program {
         }
         
         try {
-            TabulatedFunction func = new ArrayTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
+            TabulatedFunction func = new LinkedListTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
             func.setPoint(5, new FunctionPoint());
 
         } catch (FunctionPointIndexOutOfBoundsException e) {
@@ -131,7 +130,7 @@ public class Program {
         } catch (InappropriateFunctionPointException e) {}
 
         try {
-            TabulatedFunction func = new ArrayTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
+            TabulatedFunction func = new LinkedListTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
             func.getPointX(6);
 
         } catch (FunctionPointIndexOutOfBoundsException e) {
@@ -139,7 +138,7 @@ public class Program {
         }
 
         try {
-            TabulatedFunction func = new ArrayTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
+            TabulatedFunction func = new LinkedListTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
             func.setPointX(7, 9);
 
         } catch (FunctionPointIndexOutOfBoundsException e) {
@@ -147,7 +146,7 @@ public class Program {
         } catch (InappropriateFunctionPointException e) {}
 
         try {
-            TabulatedFunction func = new ArrayTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
+            TabulatedFunction func = new LinkedListTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
             func.getPointY(8);
 
         } catch (FunctionPointIndexOutOfBoundsException e) {
@@ -155,7 +154,7 @@ public class Program {
         }
 
         try {
-            TabulatedFunction func = new ArrayTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
+            TabulatedFunction func = new LinkedListTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
             func.setPointY(9, 1);
 
         } catch (FunctionPointIndexOutOfBoundsException e) {
@@ -163,7 +162,7 @@ public class Program {
         }
 
         try {
-            TabulatedFunction func = new ArrayTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
+            TabulatedFunction func = new LinkedListTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
             func.deletePoint(10);
 
         } catch (FunctionPointIndexOutOfBoundsException e) {
@@ -171,7 +170,7 @@ public class Program {
         }
 
         try {
-            TabulatedFunction func = new ArrayTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
+            TabulatedFunction func = new LinkedListTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
             func.setPoint(2, new FunctionPoint(4,10));
 
         } catch (InappropriateFunctionPointException e) {
@@ -179,7 +178,7 @@ public class Program {
         }
 
         try {
-            TabulatedFunction func = new ArrayTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
+            TabulatedFunction func = new LinkedListTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
             func.setPointX(1, 138);
 
         } catch (InappropriateFunctionPointException e) {
@@ -187,7 +186,7 @@ public class Program {
         }
 
         try {
-            TabulatedFunction func = new ArrayTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
+            TabulatedFunction func = new LinkedListTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
             func.addPoint(new FunctionPoint(-3, 54));
 
         } catch (InappropriateFunctionPointException e) {
@@ -195,7 +194,7 @@ public class Program {
         }
 
         try {
-            TabulatedFunction func = new ArrayTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
+            TabulatedFunction func = new LinkedListTabulatedFunction(-3, 3, new double[]{ -54, -2, 2, 54 });
             func.deletePoint(0);
             func.deletePoint(0);
             func.deletePoint(0);
@@ -208,7 +207,7 @@ public class Program {
 
         System.out.println("___________optimizations___________");
         
-        TabulatedFunction func = new ArrayTabulatedFunction(-3, 3, new double[]{ -1,-2,-3,-4,-5,-6,-7,-8,-9,-10 });
+        TabulatedFunction func = new LinkedListTabulatedFunction(-3, 3, new double[]{ -1,-2,-3,-4,-5,-6,-7,-8,-9,-10 });
         //initialize last accessed node
         System.out.println("At index 5:" + func.getPoint(5).getY());
         //should be optimized
