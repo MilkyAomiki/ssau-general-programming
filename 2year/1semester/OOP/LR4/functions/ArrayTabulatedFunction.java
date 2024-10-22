@@ -4,6 +4,31 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
     private FunctionPoint[] points;
     private int size = 0;
 
+    public ArrayTabulatedFunction(FunctionPoint[] points) {
+        if (points.length < 2) {
+            throw new IllegalArgumentException("The number of points should not be less than 2");
+        }
+        
+        //проверяем порядок
+        for (int i = 1; i < points.length; i++) {
+            if (points[i-1].getX() > points[i].getX()) {
+                
+                //собираем числа до текущих в строку
+                String values = "";
+                for (int j = 0; j <= i; j++) 
+                    values += points[j].getX() + ", ";
+
+                values += "...";
+
+                throw new IllegalArgumentException("X values are out of order: "+ values);
+            }
+        }
+
+        this.points = points;
+        size = points.length;
+        resize();
+    }
+
     public ArrayTabulatedFunction(double leftX, double rightX, int pointsCount) {
         if (leftX >= rightX) {
             throw new IllegalArgumentException("Left border (" + leftX +") should be smaller than the right one (" + rightX + ")");

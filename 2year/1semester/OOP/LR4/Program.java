@@ -205,6 +205,25 @@ public class Program {
             System.out.println(e.getMessage());
         }
 
+        //X out of order
+        try {
+            FunctionPoint[] points = new FunctionPoint[]
+            {
+                new FunctionPoint(-1, -101),
+                new FunctionPoint(0, 100),
+                new FunctionPoint(1, 101),
+                new FunctionPoint(2, 102),
+                new FunctionPoint(-5, 103),
+                new FunctionPoint(4, 104),
+                new FunctionPoint(5, 105)
+            };
+
+            TabulatedFunction func = new LinkedListTabulatedFunction(points);
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+
         System.out.println("___________optimizations___________");
         
         TabulatedFunction func = new LinkedListTabulatedFunction(-3, 3, new double[]{ -1,-2,-3,-4,-5,-6,-7,-8,-9,-10 });

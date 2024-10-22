@@ -7,6 +7,34 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
 
     private int size = 0;
 
+    public LinkedListTabulatedFunction(FunctionPoint[] points) {
+        if (points.length < 2) {
+            throw new IllegalArgumentException("The number of points should not be less than 2");
+        }
+
+        //проверяем порядок
+        for (int i = 1; i < points.length; i++) {
+            if (points[i-1].getX() > points[i].getX()) {
+
+                //собираем числа до текущих в строку
+                String values = "";
+                for (int j = 0; j <= i; j++) 
+                    values += points[j].getX() + ", ";
+
+                values += "...";
+
+                throw new IllegalArgumentException("X values are out of order: "+ values);
+            }
+        }
+
+        initHead();
+
+        for (int i = 0; i < points.length; i++)
+            addNodeToTail(points[i]);
+
+        size = points.length;
+    }
+
     public LinkedListTabulatedFunction(double leftX, double rightX, int pointsCount) {
         if (leftX >= rightX) {
             throw new IllegalArgumentException("Left border (" + leftX +") should be smaller than the right one (" + rightX + ")");
@@ -16,10 +44,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
             throw new IllegalArgumentException("The number of points should not be less than 2");
         }
 
-        head = new FunctionNode(null, null, null);
-        head.setNext(head);
-        head.setPrev(head);
-        lastAccessedNode = head;
+        initHead();
 
         double step = (rightX - leftX) / pointsCount;
         
@@ -48,10 +73,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
             throw new IllegalArgumentException("The number of points should not be less than 2");
         }
 
-        head = new FunctionNode(null, null, null);
-        head.setNext(head);
-        head.setPrev(head);
-        lastAccessedNode = head;
+        initHead();
 
         double step = (rightX - leftX) / (values.length-1);
         
@@ -71,6 +93,14 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
             i++;
             currNode = currNode.getNext();
         }
+    }
+
+    private void initHead()
+    {
+        head = new FunctionNode(null, null, null);
+        head.setNext(head);
+        head.setPrev(head);
+        lastAccessedNode = head;
     }
 
     private int getSize()
