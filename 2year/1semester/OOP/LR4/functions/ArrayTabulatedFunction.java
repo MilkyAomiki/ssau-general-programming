@@ -11,7 +11,8 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
         
         //проверяем порядок
         for (int i = 1; i < points.length; i++) {
-            if (points[i-1].getX() > points[i].getX()) {
+            
+            if (Double.compare(points[i-1].getX(), points[i].getX()) > 0) {
                 
                 //собираем числа до текущих в строку
                 String values = "";
