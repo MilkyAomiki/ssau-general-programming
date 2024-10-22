@@ -4,25 +4,25 @@ import functions.Function;
 
 public class Power implements Function {
     private Function base;
-    private Function power;
+    private double power;
 
-    public Power(Function base, Function power) {
+    public Power(Function base, double power) {
         this.base = base;
         this.power = power;
     }
 
     @Override
     public double getLeftDomainBorder() {
-        return power.getLeftDomainBorder();
+        return base.getLeftDomainBorder();
     }
 
     @Override
     public double getRightDomainBorder() {
-        return power.getRightDomainBorder();
+        return base.getRightDomainBorder();
     }
 
     @Override
     public double getFunctionValue(double x) {
-        return Math.pow(base.getFunctionValue(x), power.getFunctionValue(x));
+        return Math.pow(base.getFunctionValue(x), power);
     }
 }
