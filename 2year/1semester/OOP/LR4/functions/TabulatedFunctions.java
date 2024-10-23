@@ -1,5 +1,7 @@
 package functions;
 
+import java.io.*;;
+
 public class TabulatedFunctions  {
     //not allow creation
     private TabulatedFunctions() {}
@@ -33,6 +35,96 @@ public class TabulatedFunctions  {
             //переходим на след шаг
             current += step;
             i++;
+        }
+
+        return new LinkedListTabulatedFunction(points);
+    }
+
+    /**
+     * Вводит значения функции в поток
+     * @param function
+     * @param out
+     * @throws IOException if an I/O error occurs
+     */
+    public static void outputTabulatedFunction(TabulatedFunction function, OutputStream out) throws IOException
+    {
+        DataOutputStream dataout = new DataOutputStream(out);
+        
+        dataout.writeInt(function.getPointsCount());
+
+        for (int i = 0; i < function.getPointsCount(); i++) {
+            FunctionPoint point = function.getPoint(i);
+
+            dataout.writeDouble(point.getX());
+            dataout.writeDouble(point.getY());
+        }
+    }
+
+    /**
+     * Читает функцию из потока
+     * @param in
+     * @return
+     * @throws IOException if an I/O error occurs
+     */
+    public static TabulatedFunction inputTabulatedFunction(InputStream in) throws IOException
+    {
+        DataInputStream datain = new DataInputStream(in);
+        
+        int pointsCount =  datain.readInt();
+        FunctionPoint[] points = new FunctionPoint[pointsCount];
+
+        for (int i = 0; i < pointsCount; i++) {
+            double xVal = datain.readDouble();
+            double yVal = datain.readDouble();
+
+            points[i] = new FunctionPoint(xVal, yVal);
+        }
+
+        return new LinkedListTabulatedFunction(points);
+    }
+    
+    /**
+     * Записывает функцию в виде строки в out
+     * @param function
+     * @param out
+     * @throws IOException if an I/O error occurs
+     */
+    public static void writeTabulatedFunction(TabulatedFunction function, Writer out) throws IOException
+    {
+        out.write(function.getPointsCount());
+        out.write(' ');
+
+        for (int i = 0; i < function.getPointsCount(); i++) {
+            FunctionPoint point = function.getPoint(i);
+
+            out.write(point.getX() + " " + point.getY());
+        }
+    }
+
+    /**
+     * Читает функцию из строки in
+     * @param in
+     * @return
+     * @throws IOException if an I/O error occurs
+     */
+    public static TabulatedFunction readTabulatedFunction(Reader in) throws IOException
+    {
+        StreamTokenizer tokens = new StreamTokenizer(in);
+
+        tokens.nextToken();
+        int pointsCount = (int)tokens.nval;
+
+        FunctionPoint[] points = new FunctionPoint[pointsCount];
+
+        for (int i = 0; i < pointsCount; i++) {
+            
+            tokens.nextToken();
+            double xVal = tokens.nval;
+
+            tokens.nextToken();
+            double yVal = tokens.nval;
+
+            points[i] = new FunctionPoint(xVal, yVal);
         }
 
         return new LinkedListTabulatedFunction(points);
