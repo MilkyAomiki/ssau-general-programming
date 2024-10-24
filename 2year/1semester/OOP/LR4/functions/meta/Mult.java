@@ -6,28 +6,19 @@ public class Mult implements Function {
     private Function funcLeft;
     private Function funcRight;
 
-    private double leftDomainBorder;
-    private double rightDomainBorder;
-
     public Mult(Function funcLeft, Function funcRight) {
         this.funcLeft = funcLeft;
         this.funcRight = funcRight;
-
-        int leftBorderComparison = Double.compare(funcLeft.getLeftDomainBorder(), funcRight.getLeftDomainBorder());
-        leftDomainBorder = leftBorderComparison == 0 || leftBorderComparison < 0? funcLeft.getLeftDomainBorder() : funcRight.getRightDomainBorder();
-
-        int rightBorderComparison = Double.compare(funcLeft.getRightDomainBorder(), funcRight.getRightDomainBorder());
-        rightDomainBorder = rightBorderComparison == 0 || leftBorderComparison < 0? funcLeft.getRightDomainBorder() : funcRight.getRightDomainBorder();
     }
 
     @Override
     public double getLeftDomainBorder() {
-        return leftDomainBorder;
+        return Math.min(funcLeft.getLeftDomainBorder(), funcRight.getLeftDomainBorder());
     }
 
     @Override
     public double getRightDomainBorder() {
-        return rightDomainBorder;
+        return Math.min(funcRight.getRightDomainBorder(), funcLeft.getRightDomainBorder());
     }
 
     @Override
