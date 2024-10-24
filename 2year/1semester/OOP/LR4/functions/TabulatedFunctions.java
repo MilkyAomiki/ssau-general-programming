@@ -24,12 +24,12 @@ public class TabulatedFunctions  {
             throw new IllegalArgumentException("provided right border " + rightX + " is greater than function border " + function.getRightDomainBorder());       
 
         //получаем значения Y
-        double step = (rightX - leftX) / pointsCount;
+        double step = (rightX - leftX) / (pointsCount-1);
 
         double current = leftX;
         int i = 0;
         FunctionPoint[] points = new FunctionPoint[pointsCount];
-        while (current <= rightX) {
+        while (Double.compare(current, rightX) <= 0) {
             points[i] = new FunctionPoint(current, function.getFunctionValue(current));
 
             //переходим на след шаг
@@ -91,13 +91,12 @@ public class TabulatedFunctions  {
      */
     public static void writeTabulatedFunction(TabulatedFunction function, Writer out) throws IOException
     {
-        out.write(function.getPointsCount());
-        out.write(' ');
+        out.write(Integer.toString(function.getPointsCount()));
 
         for (int i = 0; i < function.getPointsCount(); i++) {
             FunctionPoint point = function.getPoint(i);
 
-            out.write(point.getX() + " " + point.getY());
+            out.write("\n" + point.getX() + " " + point.getY());
         }
     }
 

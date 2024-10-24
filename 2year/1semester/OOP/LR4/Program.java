@@ -1,8 +1,23 @@
+import functions.Function;
 import functions.FunctionPoint;
 import functions.FunctionPointIndexOutOfBoundsException;
+import functions.Functions;
 import functions.InappropriateFunctionPointException;
 import functions.LinkedListTabulatedFunction;
 import functions.TabulatedFunction;
+import functions.TabulatedFunctions;
+import functions.basic.Cos;
+import functions.basic.Exp;
+import functions.basic.Log;
+import functions.basic.Sin;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DecimalFormat;
 
 public class Program {
     public static void main(String[] args) {
@@ -233,5 +248,95 @@ public class Program {
         System.out.println("At index 8:" + func.getPoint(8).getY());
         //should be optimized
         System.out.println("At index 6:" + func.getPoint(6).getY());
+
+
+        System.out.println("___________________trig functions___________________");
+        DecimalFormat format = new DecimalFormat("#.###");
+        System.out.println("___________sin___________");
+        Function sin = new Sin();
+        outputFuncWithStep(sin, 0, 2*Math.PI, 0.1, format);
+
+        System.out.println("___________cos___________");
+        Function cos = new Cos();
+        outputFuncWithStep(cos, 0, 2*Math.PI, 0.1, format);
+
+        System.out.println("___________________trig functions (tabulated)___________________");
+
+        System.out.println("___________sin (tabulated)___________");
+        TabulatedFunction sinTab = TabulatedFunctions.tabulate(sin, 0, 2*Math.PI, 10);
+        outputFuncWithStep(sinTab, 0, 2*Math.PI, 0.1, format);
+
+        System.out.println("___________cos (tabulated)___________");
+        TabulatedFunction cosTab = TabulatedFunctions.tabulate(cos, 0, 2*Math.PI, 10);
+        outputFuncWithStep(cosTab, 0, 2*Math.PI, 0.1, format);
+
+        System.out.println("_________Сумма квадратов табулированных косинуса и синуса___________");
+        Function squaredSum = Functions.sum(Functions.power(sinTab, 2), Functions.power(cosTab, 2));
+        outputFuncWithStep(squaredSum, 0, 2*Math.PI, 0.1, format);
+
+        System.out.println("_________Сумма квадратов табулированных косинуса и синуса [updated: cos(0) = 5] ___________");
+        try {
+            cosTab.setPoint(0, new FunctionPoint(0, -5));
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        outputFuncWithStep(squaredSum, 0, 2*Math.PI, 0.1, format);
+
+        System.out.println("_________tabulated EXP [initial] ___________");
+        TabulatedFunction expTab = TabulatedFunctions.tabulate(new Exp(), 0, 10, 11);
+        outputFuncWithStep(expTab, 0, 10, 1, format);
+
+        try {
+            FileWriter writer = new FileWriter("serialized_functions/tabulated_exponent");
+            TabulatedFunctions.writeTabulatedFunction(expTab, writer);
+            writer.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("_________tabulated EXP [from file] ___________");
+        try {
+            FileReader reader = new FileReader("serialized_functions/tabulated_exponent");
+            TabulatedFunction expTabFile = TabulatedFunctions.readTabulatedFunction(reader);
+            reader.close();
+            outputFuncWithStep(expTabFile, 0, 10, 1, format);
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("_________tabulated LOG [initial] ___________");
+
+        TabulatedFunction logTab = TabulatedFunctions.tabulate(new Log(Math.E), 1, 10, 10);
+        outputFuncWithStep(logTab, 1, 10, 1, format);
+        try {
+            FileOutputStream filestream = new FileOutputStream("serialized_functions/tabulated_exponent_streamed");
+            TabulatedFunctions.outputTabulatedFunction(logTab, filestream);
+            filestream.close();
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("_________tabulated LOG [from file] ___________");
+        try {
+            FileInputStream reader = new FileInputStream("serialized_functions/tabulated_exponent_streamed");
+            TabulatedFunction logTabFile = TabulatedFunctions.inputTabulatedFunction(reader);
+            reader.close();
+            outputFuncWithStep(logTabFile, 1, 10, 1, format);
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void outputFuncWithStep(Function func, double minX, double maxX, double step, DecimalFormat format)
+    {
+        for (double x = minX; Double.compare(x, maxX) <= 0; x += step) {
+            
+            System.out.println(format.format(x) + " | " + format.format(func.getFunctionValue(x)));
+        }
     }
 }
