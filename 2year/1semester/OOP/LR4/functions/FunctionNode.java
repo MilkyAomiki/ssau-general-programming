@@ -1,6 +1,11 @@
 package functions;
 
-public class FunctionNode {
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
+public class FunctionNode implements Externalizable {
     private FunctionNode next;
     private FunctionNode prev;
 
@@ -34,5 +39,19 @@ public class FunctionNode {
 
     public void setNext(FunctionNode next) {
         this.next = next;
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeObject(next);
+        out.writeObject(prev);
+        out.writeObject(data);
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        next = (FunctionNode)in.readObject();
+        prev = (FunctionNode)in.readObject();
+        data = (FunctionPoint)in.readObject();
     }
 }

@@ -1,11 +1,19 @@
 package functions;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 public class LinkedListTabulatedFunction implements TabulatedFunction {
     private FunctionNode head;
     private FunctionNode lastAccessedNode;
     private int lastAccessedIndex = 0;
 
     private int size = 0;
+
+    public LinkedListTabulatedFunction() {
+
+    }
 
     public LinkedListTabulatedFunction(FunctionPoint[] points) {
         if (points.length < 2) {
@@ -382,5 +390,21 @@ public class LinkedListTabulatedFunction implements TabulatedFunction {
         }
 
         return false;
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeObject(head);
+        out.writeObject(lastAccessedNode);
+        out.writeInt(lastAccessedIndex);
+        out.writeInt(size);
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        head = (FunctionNode)in.readObject();
+        lastAccessedNode = (FunctionNode)in.readObject();
+        lastAccessedIndex = in.readInt();
+        size = in.readInt();
     }
 }

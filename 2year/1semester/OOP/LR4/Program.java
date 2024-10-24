@@ -11,12 +11,13 @@ import functions.basic.Exp;
 import functions.basic.Log;
 import functions.basic.Sin;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
 
 public class Program {
@@ -327,6 +328,32 @@ public class Program {
             reader.close();
             outputFuncWithStep(logTabFile, 1, 10, 1, format);
             
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("_________tabulated ln(exp(x)) [initial serialized] ___________");
+
+        TabulatedFunction logExpTab = TabulatedFunctions.tabulate(Functions.composition(new Log(Math.E), new Exp()), 0, 10, 11);
+        outputFuncWithStep(logExpTab, 0, 10, 1, format);
+        try {
+            FileOutputStream filestream = new FileOutputStream("serialized_functions/tabulated_exponent_serializable");
+            ObjectOutputStream outputstream = new ObjectOutputStream(filestream);
+            outputstream.writeObject(logExpTab);
+            filestream.close();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("_________tabulated ln(exp(x)) [from file serialized] ___________");
+        try {
+            FileInputStream reader = new FileInputStream("serialized_functions/tabulated_exponent_serializable");
+            ObjectInputStream inputstream = new ObjectInputStream(reader);
+            TabulatedFunction logExpTabFile = (TabulatedFunction)inputstream.readObject();
+            inputstream.close();
+            outputFuncWithStep(logExpTabFile, 1, 10, 1, format);
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

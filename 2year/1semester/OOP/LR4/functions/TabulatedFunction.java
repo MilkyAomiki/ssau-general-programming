@@ -1,6 +1,8 @@
 package functions;
 
-public interface TabulatedFunction extends Function{
+import java.io.Externalizable;
+
+public interface TabulatedFunction extends Function, Externalizable{
     void deletePoint(int index);
     void addPoint(FunctionPoint point)  throws InappropriateFunctionPointException;
 

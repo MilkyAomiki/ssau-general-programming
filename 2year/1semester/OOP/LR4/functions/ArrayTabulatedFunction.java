@@ -1,5 +1,9 @@
 package functions;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 public class ArrayTabulatedFunction implements TabulatedFunction {
     private FunctionPoint[] points;
     private int size = 0;
@@ -286,4 +290,24 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
         return false;
     }
 
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeInt(points.length);
+        out.writeInt(size);
+        for (FunctionPoint point : points) {
+            out.writeObject(point);
+        }
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        int length = in.readInt();
+        size = in.readInt();
+
+        points = new FunctionPoint[length];
+
+        for (int i = 0; i < size; i++) {
+            points[i] = (FunctionPoint)in.readObject();
+        }
+    }
 }
