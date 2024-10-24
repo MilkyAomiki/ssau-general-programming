@@ -45,7 +45,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Externali
     }
 
     public LinkedListTabulatedFunction(double leftX, double rightX, int pointsCount) {
-        if (leftX >= rightX) {
+        if (Double.compare(leftX, rightX) >= 0) {
             throw new IllegalArgumentException("Left border (" + leftX +") should be smaller than the right one (" + rightX + ")");
         }
 
@@ -74,7 +74,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Externali
     }
 
     public LinkedListTabulatedFunction(double leftX, double rightX, double[] values) {
-        if (leftX >= rightX) {
+        if (Double.compare(leftX, rightX) >= 0) {
             throw new IllegalArgumentException("Left border (" + leftX +") should be smaller than the right one (" + rightX + ")");
         }
 
@@ -92,7 +92,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Externali
         double current = leftX;
         FunctionNode currNode = head;
         int i = 0;
-        while (current <= rightX) {
+        while (Double.compare(current, rightX) <= 0) {
             currNode.setNext(new FunctionNode(head, currNode, new FunctionPoint(current, values[i])));
             currNode.getNext().setPrev(currNode);
             head.setPrev(currNode.getNext());

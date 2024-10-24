@@ -251,7 +251,7 @@ public class Program {
         System.out.println("At index 6:" + func.getPoint(6).getY());
 
 
-        System.out.println("___________________trig functions___________________");
+        System.out.println("____trig functions___________________________________________________________________________________________");
         DecimalFormat format = new DecimalFormat("#.###");
         System.out.println("___________sin___________");
         Function sin = new Sin();
@@ -261,7 +261,7 @@ public class Program {
         Function cos = new Cos();
         outputFuncWithStep(cos, 0, 2*Math.PI, 0.1, format);
 
-        System.out.println("___________________trig functions (tabulated)___________________");
+        System.out.println("____trig functions (tabulated)___________________________________________________________________________________________");
 
         System.out.println("___________sin (tabulated)___________");
         TabulatedFunction sinTab = TabulatedFunctions.tabulate(sin, 0, 2*Math.PI, 10);
@@ -275,6 +275,7 @@ public class Program {
         Function squaredSum = Functions.sum(Functions.power(sinTab, 2), Functions.power(cosTab, 2));
         outputFuncWithStep(squaredSum, 0, 2*Math.PI, 0.1, format);
 
+        System.out.println("____streams___________________________________________________________________________________________");
         System.out.println("_________Сумма квадратов табулированных косинуса и синуса [updated: cos(0) = 5] ___________");
         try {
             cosTab.setPoint(0, new FunctionPoint(0, -5));
@@ -332,6 +333,7 @@ public class Program {
             System.out.println(e.getMessage());
         }
 
+        System.out.println("____serialization___________________________________________________________________________________________");
         System.out.println("_________tabulated ln(exp(x)) [initial serialized] ___________");
 
         TabulatedFunction logExpTab = TabulatedFunctions.tabulate(Functions.composition(new Log(Math.E), new Exp()), 0, 10, 11);

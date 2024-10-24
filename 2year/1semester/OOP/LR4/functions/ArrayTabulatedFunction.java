@@ -59,7 +59,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     }
 
     public ArrayTabulatedFunction(double leftX, double rightX, double[] values) {
-        if (leftX >= rightX) {
+        if (Double.compare(leftX, rightX) >= 0) {
             throw new IllegalArgumentException("Left border (" + leftX +") should be smaller than the right one (" + rightX + ")");
         }
 
@@ -75,7 +75,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
         //заполняем points
         double current = leftX;
         int i = 0;
-        while (current <= rightX) {
+        while (Double.compare(current, rightX) <= 0) {
             points[i] = new FunctionPoint(current, values[i]);
 
             //переходим на след шаг
