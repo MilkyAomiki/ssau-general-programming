@@ -1,10 +1,11 @@
 package functions;
 
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-public class LinkedListTabulatedFunction implements TabulatedFunction {
+public class LinkedListTabulatedFunction implements TabulatedFunction, Externalizable {
     private FunctionNode head;
     private FunctionNode lastAccessedNode;
     private int lastAccessedIndex = 0;

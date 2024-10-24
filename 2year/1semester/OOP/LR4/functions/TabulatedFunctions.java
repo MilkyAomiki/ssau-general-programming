@@ -37,7 +37,7 @@ public class TabulatedFunctions  {
             i++;
         }
 
-        return new LinkedListTabulatedFunction(points);
+        return new ArrayTabulatedFunction(points);
     }
 
     /**
@@ -80,7 +80,7 @@ public class TabulatedFunctions  {
             points[i] = new FunctionPoint(xVal, yVal);
         }
 
-        return new LinkedListTabulatedFunction(points);
+        return new ArrayTabulatedFunction(points);
     }
     
     /**
@@ -126,6 +126,6 @@ public class TabulatedFunctions  {
             points[i] = new FunctionPoint(xVal, yVal);
         }
 
-        return new LinkedListTabulatedFunction(points);
+        return new ArrayTabulatedFunction(points);
     }
 }

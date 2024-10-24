@@ -1,10 +1,8 @@
 package functions;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
+import java.io.Serializable;
 
-public class ArrayTabulatedFunction implements TabulatedFunction {
+public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     private FunctionPoint[] points;
     private int size = 0;
 
@@ -290,6 +288,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
         return false;
     }
 
+/*
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeInt(points.length);
@@ -309,5 +308,6 @@ public class ArrayTabulatedFunction implements TabulatedFunction {
         for (int i = 0; i < size; i++) {
             points[i] = (FunctionPoint)in.readObject();
         }
-    }
+    } 
+*/
 }

@@ -1,11 +1,8 @@
 package functions;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
+import java.io.Serializable;
 
-public class FunctionNode implements Externalizable {
+public class FunctionNode implements Serializable {
     private FunctionNode next;
     private FunctionNode prev;
 
@@ -39,19 +36,5 @@ public class FunctionNode implements Externalizable {
 
     public void setNext(FunctionNode next) {
         this.next = next;
-    }
-
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(next);
-        out.writeObject(prev);
-        out.writeObject(data);
-    }
-
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        next = (FunctionNode)in.readObject();
-        prev = (FunctionNode)in.readObject();
-        data = (FunctionPoint)in.readObject();
     }
 }
