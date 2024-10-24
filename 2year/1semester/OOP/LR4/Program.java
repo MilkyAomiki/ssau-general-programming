@@ -21,6 +21,17 @@ import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
 
 public class Program {
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001b[34;40;1m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_MAGENTA = "\u001b[35;40;1m";
+    public static final String ANSI_WHITE = "\u001B[37m";
+
     public static void main(String[] args) {
         TabulatedFunction tabFuncLin = new LinkedListTabulatedFunction(-2, 2, new double[]{ -8, -3, 2, 7, 12 });
         
@@ -250,33 +261,34 @@ public class Program {
         //should be optimized
         System.out.println("At index 6:" + func.getPoint(6).getY());
 
-
-        System.out.println("____trig functions___________________________________________________________________________________________");
+        //ЛАБОРАТОРНАЯ РАБОТА 4
+        //ТРИГОНОМЕТРИЧЕСКИЕ ФУНКЦИИ
+        System.out.println(ANSI_BLUE+"____trig functions___________________________________________________________________________________________"+ANSI_RESET);
         DecimalFormat format = new DecimalFormat("#.###");
-        System.out.println("___________sin___________");
+        System.out.println(ANSI_MAGENTA + "___________sin___________" + ANSI_RESET);
         Function sin = new Sin();
         outputFuncWithStep(sin, 0, 2*Math.PI, 0.1, format);
 
-        System.out.println("___________cos___________");
+        System.out.println(ANSI_MAGENTA + "___________cos___________" + ANSI_RESET);
         Function cos = new Cos();
         outputFuncWithStep(cos, 0, 2*Math.PI, 0.1, format);
 
-        System.out.println("____trig functions (tabulated)___________________________________________________________________________________________");
+        System.out.println(ANSI_BLUE+"____trig functions (tabulated)___________________________________________________________________________________________" +  ANSI_RESET);
 
-        System.out.println("___________sin (tabulated)___________");
+        System.out.println(ANSI_MAGENTA + "___________sin (tabulated)___________" + ANSI_RESET);
         TabulatedFunction sinTab = TabulatedFunctions.tabulate(sin, 0, 2*Math.PI, 10);
         outputFuncWithStep(sinTab, 0, 2*Math.PI, 0.1, format);
 
-        System.out.println("___________cos (tabulated)___________");
+        System.out.println(ANSI_MAGENTA + "___________cos (tabulated)___________"+ ANSI_RESET);
         TabulatedFunction cosTab = TabulatedFunctions.tabulate(cos, 0, 2*Math.PI, 10);
         outputFuncWithStep(cosTab, 0, 2*Math.PI, 0.1, format);
 
-        System.out.println("_________Сумма квадратов табулированных косинуса и синуса___________");
+        System.out.println(ANSI_MAGENTA + "_________Сумма квадратов табулированных косинуса и синуса___________" + ANSI_RESET);
         Function squaredSum = Functions.sum(Functions.power(sinTab, 2), Functions.power(cosTab, 2));
         outputFuncWithStep(squaredSum, 0, 2*Math.PI, 0.1, format);
 
-        System.out.println("____streams___________________________________________________________________________________________");
-        System.out.println("_________Сумма квадратов табулированных косинуса и синуса [updated: cos(0) = 5] ___________");
+        System.out.println(ANSI_BLUE+"____streams___________________________________________________________________________________________" + ANSI_RESET);
+        System.out.println(ANSI_MAGENTA + "_________Сумма квадратов табулированных косинуса и синуса [updated: cos(0) = 5] ___________" + ANSI_RESET);
         try {
             cosTab.setPoint(0, new FunctionPoint(0, -5));
             
@@ -286,7 +298,7 @@ public class Program {
 
         outputFuncWithStep(squaredSum, 0, 2*Math.PI, 0.1, format);
 
-        System.out.println("_________tabulated EXP [initial] ___________");
+        System.out.println(ANSI_MAGENTA + "_________tabulated EXP [initial] ___________" + ANSI_RESET);
         TabulatedFunction expTab = TabulatedFunctions.tabulate(new Exp(), 0, 10, 11);
         outputFuncWithStep(expTab, 0, 10, 1, format);
 
@@ -298,7 +310,7 @@ public class Program {
             System.out.println(e.getMessage());
         }
 
-        System.out.println("_________tabulated EXP [from file] ___________");
+        System.out.println(ANSI_MAGENTA + "_________tabulated EXP [from file] ___________" + ANSI_RESET);
         try {
             FileReader reader = new FileReader("serialized_functions/tabulated_exponent");
             TabulatedFunction expTabFile = TabulatedFunctions.readTabulatedFunction(reader);
@@ -309,7 +321,7 @@ public class Program {
             System.out.println(e.getMessage());
         }
 
-        System.out.println("_________tabulated LOG [initial] ___________");
+        System.out.println(ANSI_MAGENTA + "_________tabulated LOG [initial] ___________" + ANSI_RESET);
 
         TabulatedFunction logTab = TabulatedFunctions.tabulate(new Log(Math.E), 1, 10, 10);
         outputFuncWithStep(logTab, 1, 10, 1, format);
@@ -322,7 +334,7 @@ public class Program {
             System.out.println(e.getMessage());
         }
 
-        System.out.println("_________tabulated LOG [from file] ___________");
+        System.out.println(ANSI_MAGENTA + "_________tabulated LOG [from file] ___________" + ANSI_RESET);
         try {
             FileInputStream reader = new FileInputStream("serialized_functions/tabulated_exponent_streamed");
             TabulatedFunction logTabFile = TabulatedFunctions.inputTabulatedFunction(reader);
@@ -333,8 +345,8 @@ public class Program {
             System.out.println(e.getMessage());
         }
 
-        System.out.println("____serialization___________________________________________________________________________________________");
-        System.out.println("_________tabulated ln(exp(x)) [initial serialized] ___________");
+        System.out.println(ANSI_BLUE + "____serialization___________________________________________________________________________________________" + ANSI_RESET);
+        System.out.println(ANSI_MAGENTA + "_________tabulated ln(exp(x)) [initial serialized] ___________" + ANSI_RESET);
 
         TabulatedFunction logExpTab = TabulatedFunctions.tabulate(Functions.composition(new Log(Math.E), new Exp()), 0, 10, 11);
         outputFuncWithStep(logExpTab, 0, 10, 1, format);
@@ -348,7 +360,7 @@ public class Program {
             System.out.println(e.getMessage());
         }
 
-        System.out.println("_________tabulated ln(exp(x)) [from file serialized] ___________");
+        System.out.println(ANSI_MAGENTA + "_________tabulated ln(exp(x)) [from file serialized] ___________" + ANSI_RESET);
         try {
             FileInputStream reader = new FileInputStream("serialized_functions/tabulated_exponent_serializable");
             ObjectInputStream inputstream = new ObjectInputStream(reader);

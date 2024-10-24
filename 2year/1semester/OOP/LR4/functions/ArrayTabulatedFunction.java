@@ -41,7 +41,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
             throw new IllegalArgumentException("The number of points should not be less than 2");
         }
 
-        double step = (rightX - leftX) / pointsCount;
+        double step = (rightX - leftX) / (pointsCount - 1);
         
         setSize(pointsCount);
         points = new FunctionPoint[getSize()*2];
@@ -67,7 +67,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
             throw new IllegalArgumentException("The number of points should not be less than 2");
         }
 
-        double step = (rightX - leftX) / (values.length-1);
+        double step = (rightX - leftX) / (values.length - 1);
         
         setSize(values.length);
         points = new FunctionPoint[getSize() * 2];

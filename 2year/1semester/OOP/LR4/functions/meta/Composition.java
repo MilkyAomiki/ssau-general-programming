@@ -13,12 +13,12 @@ public class Composition implements Function {
 
     @Override
     public double getLeftDomainBorder() {
-        return funcRight.getLeftDomainBorder();
+        return Math.min(funcRight.getLeftDomainBorder(), funcLeft.getLeftDomainBorder());
     }
 
     @Override
     public double getRightDomainBorder() {
-        return funcRight.getRightDomainBorder();
+        return Math.min(funcRight.getRightDomainBorder(), funcLeft.getRightDomainBorder());
     }
 
     @Override

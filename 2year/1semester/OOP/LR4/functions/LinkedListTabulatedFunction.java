@@ -12,6 +12,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Externali
 
     private int size = 0;
 
+    //For externalizable
     public LinkedListTabulatedFunction() {
 
     }
@@ -55,7 +56,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Externali
 
         initHead();
 
-        double step = (rightX - leftX) / pointsCount;
+        double step = (rightX - leftX) / (pointsCount - 1);
         
         setSize(pointsCount);
 
@@ -84,7 +85,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Externali
 
         initHead();
 
-        double step = (rightX - leftX) / (values.length-1);
+        double step = (rightX - leftX) / (values.length - 1);
         
         setSize(values.length);
 
