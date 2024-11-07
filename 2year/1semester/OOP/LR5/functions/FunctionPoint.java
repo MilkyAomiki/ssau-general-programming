@@ -37,4 +37,44 @@ public class FunctionPoint implements Serializable
         x = 0;
         y = 0;
     }
+
+    @Override
+    public String toString() {
+        return "(x" + x + ", " + y + ")";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        long temp;
+        temp = Double.doubleToLongBits(x);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(y);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+
+        FunctionPoint other = (FunctionPoint) obj;
+        
+        if (Double.compare(x, other.x) != 0)
+            return false;
+        if (Double.compare(y, other.y) != 0)
+            return false;
+        return true;
+    }
+
+    @Override
+    protected Object clone() {
+        return new FunctionPoint(x, y);
+    }
 }
