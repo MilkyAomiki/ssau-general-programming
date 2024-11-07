@@ -1,10 +1,15 @@
 package functions;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     private FunctionPoint[] points;
     private int size = 0;
+
+    private ArrayTabulatedFunction()
+    {
+    }
 
     public ArrayTabulatedFunction(FunctionPoint[] points) {
         if (points.length < 2) {
@@ -286,6 +291,69 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
         }
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        String res = "{" + points[0].toString();
+
+        for (int i = 1; i < points.length; i++) {
+            res += ", " + points[i].toString();
+        }
+
+        res += "}";
+
+        return res;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + Arrays.hashCode(points);
+        result = prime * result + size;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj instanceof TabulatedFunction)
+        {
+            TabulatedFunction other = (TabulatedFunction) obj;
+
+            if (size != other.getPointsCount())
+                return false;
+
+            if (other instanceof ArrayTabulatedFunction) {
+                return Arrays.equals(((ArrayTabulatedFunction)other).points, points);
+            }
+
+            for (int i = 0; i < other.getPointsCount(); i++) {
+                if (!points[i].equals(other.getPoint(i))) {
+                    return false;
+                }
+            }
+            return true;
+
+        }
+
+        return false;
+    }
+
+    @Override
+    protected Object clone() {
+        FunctionPoint clonedPoints[] = new FunctionPoint[points.length];
+        for (int i = 0; i < points.length; i++) {
+            clonedPoints[i] = (FunctionPoint)points[i].clone();
+        }
+
+        ArrayTabulatedFunction tabFunc = new ArrayTabulatedFunction();
+        tabFunc.points = clonedPoints;
+        tabFunc.size = size;
+
+        return tabFunc;
     }
 
 /*
