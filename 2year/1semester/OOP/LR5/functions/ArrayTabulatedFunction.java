@@ -343,7 +343,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     }
 
     @Override
-    protected Object clone() {
+    public Object clone() {
         FunctionPoint clonedPoints[] = new FunctionPoint[points.length];
         for (int i = 0; i < points.length; i++) {
             clonedPoints[i] = (FunctionPoint)points[i].clone();

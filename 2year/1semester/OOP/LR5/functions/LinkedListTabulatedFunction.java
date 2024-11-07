@@ -4,7 +4,6 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.Arrays;
 
 public class LinkedListTabulatedFunction implements TabulatedFunction, Externalizable {
     private FunctionNode head;
@@ -484,7 +483,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Externali
     }
 
     @Override
-    protected Object clone() {
+    public Object clone() {
         LinkedListTabulatedFunction tabFunc = new LinkedListTabulatedFunction();
         tabFunc.initHead();
 
