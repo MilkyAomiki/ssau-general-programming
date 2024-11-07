@@ -4,6 +4,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Arrays;
 
 public class LinkedListTabulatedFunction implements TabulatedFunction, Externalizable {
     private FunctionNode head;
@@ -238,6 +239,8 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Externali
         FunctionNode curr = new FunctionNode(head, left, point);
         left.setNext(curr);
         head.setPrev(curr);
+
+        setSize(getSize()+1);
         return curr;
     }
 
@@ -408,5 +411,92 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Externali
         lastAccessedNode = (FunctionNode)in.readObject();
         lastAccessedIndex = in.readInt();
         size = in.readInt();
+    }
+
+    @Override
+    public String toString() {
+        FunctionNode curr = head.getNext();
+
+        String res = "{" + curr.getData().toString();
+
+        for (int i = 1; i < size; i++) {
+            curr = curr.getNext();
+
+            res += ", " + curr.toString();
+        }
+
+        res += "}";
+
+        return res;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((head == null) ? 0 : head.hashCode());
+        
+        FunctionNode curr = head.getNext();
+        while (curr != head) {
+            result = prime * result + curr.getData().hashCode();
+        }
+
+        result = prime * result + size;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj instanceof TabulatedFunction)
+        {
+            TabulatedFunction other = (TabulatedFunction) obj;
+
+            if (size != other.getPointsCount())
+                return false;
+
+            if (other instanceof LinkedListTabulatedFunction) {
+                FunctionNode curr = head;
+                FunctionNode currOther = ((LinkedListTabulatedFunction)other).head;
+                for (int i = 0; i < other.getPointsCount(); i++) {
+                    curr = curr.getNext();
+    
+                    if (!curr.getData().equals(currOther.getData())) {
+                        return false;
+                    }
+                }
+            }
+
+            FunctionNode curr = head;
+            for (int i = 0; i < other.getPointsCount(); i++) {
+                curr = curr.getNext();
+
+                if (!curr.getData().equals(other.getPoint(i))) {
+                    return false;
+                }
+            }
+            return true;
+
+        }
+
+        return false;
+    }
+
+    @Override
+    protected Object clone() {
+        LinkedListTabulatedFunction tabFunc = new LinkedListTabulatedFunction();
+        tabFunc.initHead();
+
+        FunctionNode curr = head;
+        for (int i = 0; i < size; i++) {
+            curr = head.getPrev();
+            tabFunc.addNodeToTail((FunctionPoint)curr.getData().clone());
+        }
+
+        tabFunc.lastAccessedIndex = lastAccessedIndex;
+        tabFunc.lastAccessedNode = lastAccessedNode;
+
+        return tabFunc;
     }
 }
