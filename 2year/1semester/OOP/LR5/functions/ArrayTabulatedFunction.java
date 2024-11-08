@@ -297,7 +297,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     public String toString() {
         String res = "{" + points[0].toString();
 
-        for (int i = 1; i < points.length; i++) {
+        for (int i = 1; i < size; i++) {
             res += ", " + points[i].toString();
         }
 
@@ -345,7 +345,7 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     @Override
     public Object clone() {
         FunctionPoint clonedPoints[] = new FunctionPoint[points.length];
-        for (int i = 0; i < points.length; i++) {
+        for (int i = 0; i < size; i++) {
             clonedPoints[i] = (FunctionPoint)points[i].clone();
         }
 

@@ -40,7 +40,7 @@ public class FunctionPoint implements Serializable
 
     @Override
     public String toString() {
-        return "(x" + x + ", " + y + ")";
+        return "(" + x + ", " + y + ")";
     }
 
     @Override

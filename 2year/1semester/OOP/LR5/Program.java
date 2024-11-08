@@ -371,6 +371,29 @@ public class Program {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
+        //LR5
+
+        System.out.println(ANSI_BLUE+"____LR5___________________________________________________________________________________________"+ANSI_RESET);
+
+        System.out.println(ANSI_MAGENTA + "___________sin___________" + ANSI_RESET);
+        TabulatedFunction sin2 = TabulatedFunctions.tabulate(new Sin(), -1, 1, 10);
+        System.out.println(sin2.hashCode());
+        System.out.println(sin2.toString());
+
+        System.out.println(ANSI_MAGENTA + "___________cos___________" + ANSI_RESET);
+        TabulatedFunction cos2 = TabulatedFunctions.tabulate(new Cos(), -1, 1, 10);
+        System.out.println(cos2.hashCode());
+        System.out.println(cos2.toString());
+
+        System.out.println(ANSI_MAGENTA + "___________cos equals sin:___________" + ANSI_RESET);
+        System.out.println(sin2.equals(cos2));
+
+        System.out.println(ANSI_MAGENTA + "___________cloned cos:___________" + ANSI_RESET);
+        System.out.println(cos2.clone().toString());
+
+        System.out.println(ANSI_MAGENTA + "___________cloned cos equals cos:___________" + ANSI_RESET);
+        System.out.println(cos2.clone().equals(cos2));
     }
 
     private static void outputFuncWithStep(Function func, double minX, double maxX, double step, DecimalFormat format)
