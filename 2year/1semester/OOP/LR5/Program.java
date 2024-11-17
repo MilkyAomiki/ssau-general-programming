@@ -378,22 +378,61 @@ public class Program {
 
         System.out.println(ANSI_MAGENTA + "___________sin___________" + ANSI_RESET);
         TabulatedFunction sin2 = TabulatedFunctions.tabulate(new Sin(), -1, 1, 10);
-        System.out.println(sin2.hashCode());
+        System.out.println(ANSI_GREEN + "hashcode: " + ANSI_RESET + sin2.hashCode());
+        System.out.println(sin2.toString());
+        try {
+            sin2.addPoint(new FunctionPoint(0.5, 0.5));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println("");
+        System.out.println(ANSI_GREEN + "-- Added (0.5, 0.5)" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "hashcode: " + ANSI_RESET + sin2.hashCode());
         System.out.println(sin2.toString());
 
         System.out.println(ANSI_MAGENTA + "___________cos___________" + ANSI_RESET);
         TabulatedFunction cos2 = TabulatedFunctions.tabulate(new Cos(), -1, 1, 10);
-        System.out.println(cos2.hashCode());
+        System.out.println(ANSI_MAGENTA+ "hashcode: " + ANSI_RESET + cos2.hashCode());
         System.out.println(cos2.toString());
 
-        System.out.println(ANSI_MAGENTA + "___________cos equals sin:___________" + ANSI_RESET);
-        System.out.println(sin2.equals(cos2));
+        cos2.deletePoint(3);
+        System.out.println("");
+        System.out.println(ANSI_GREEN + "-- Removed at 3" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "hashcode: " + ANSI_RESET + cos2.hashCode());
+        System.out.println(cos2.toString());
 
         System.out.println(ANSI_MAGENTA + "___________cloned cos:___________" + ANSI_RESET);
-        System.out.println(cos2.clone().toString());
+        TabulatedFunction clonedCos2 = (TabulatedFunction)cos2.clone();
+        System.out.println(ANSI_GREEN + "hashcode: " + ANSI_RESET + clonedCos2.hashCode());
+        System.out.println(clonedCos2.toString());
 
-        System.out.println(ANSI_MAGENTA + "___________cloned cos equals cos:___________" + ANSI_RESET);
-        System.out.println(cos2.clone().equals(cos2));
+        clonedCos2.setPointY(0, -0.666);
+        System.out.println("");
+        System.out.println(ANSI_GREEN + "-- Changed Y at 0 to -0.666" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "hashcode: " + ANSI_RESET + clonedCos2.hashCode());
+        System.out.println(clonedCos2.toString());
+        System.out.println(ANSI_GREEN + "-- Original cos:" + ANSI_RESET);
+        System.out.println(cos2.toString());
+
+
+        System.out.println(ANSI_MAGENTA + "___________array vs linked, same contents:___________" + ANSI_RESET);
+        TabulatedFunction funcLink = new LinkedListTabulatedFunction(-2, 2, new double[]{ -8, -3, 2, 7, 12 });
+        System.out.println(ANSI_GREEN + "-- Linked:" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "hashcode: " + ANSI_RESET + funcLink.hashCode());
+        System.out.println(funcLink.toString());
+        System.out.println("");
+        TabulatedFunction funcArr = new LinkedListTabulatedFunction(-2, 2, new double[]{ -8, -3, 2, 7, 12 });
+        System.out.println(ANSI_GREEN + "-- Array:" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "hashcode: " + ANSI_RESET + funcArr.hashCode());
+        System.out.println(funcArr.toString());
+        System.out.println("");
+
+        System.out.println(ANSI_MAGENTA + "___________equality___________" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "cos equals sin: " + ANSI_RESET + sin2.equals(cos2));
+        System.out.println(ANSI_GREEN + "cos equals cos: " + ANSI_RESET + cos2.equals(cos2));
+        System.out.println(ANSI_GREEN + "cloned cos equals cos: " + ANSI_RESET + clonedCos2.equals(cos2));
+        System.out.println(ANSI_GREEN + "linked equals array: " + ANSI_RESET + funcLink.equals(funcArr));
+        System.out.println(ANSI_GREEN + "array equals linked: " + ANSI_RESET + funcArr.equals(funcLink));
     }
 
     private static void outputFuncWithStep(Function func, double minX, double maxX, double step, DecimalFormat format)

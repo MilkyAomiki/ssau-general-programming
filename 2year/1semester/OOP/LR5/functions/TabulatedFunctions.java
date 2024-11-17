@@ -37,7 +37,7 @@ public class TabulatedFunctions  {
             i++;
         }
 
-        return new ArrayTabulatedFunction(points);
+        return new LinkedListTabulatedFunction(points);
     }
 
     /**

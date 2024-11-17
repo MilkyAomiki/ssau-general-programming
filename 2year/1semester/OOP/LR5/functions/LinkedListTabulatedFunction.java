@@ -421,7 +421,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Externali
         for (int i = 1; i < size; i++) {
             curr = curr.getNext();
 
-            res += ", " + curr.toString();
+            res += ", " + curr.getData().toString();
         }
 
         res += "}";
@@ -435,8 +435,10 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Externali
         int result = 1;
         result = prime * result + ((head == null) ? 0 : head.hashCode());
         
-        FunctionNode curr = head.getNext();
+        FunctionNode curr = head;
         while (curr != head) {
+            curr = curr.getNext();
+
             result = prime * result + curr.getData().hashCode();
         }
 
@@ -460,6 +462,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Externali
                 FunctionNode currOther = ((LinkedListTabulatedFunction)other).head;
                 for (int i = 0; i < other.getPointsCount(); i++) {
                     curr = curr.getNext();
+                    currOther = currOther.getNext();
     
                     if (!curr.getData().equals(currOther.getData())) {
                         return false;
@@ -484,18 +487,22 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Externali
 
     @Override
     public Object clone() {
-        LinkedListTabulatedFunction tabFunc = new LinkedListTabulatedFunction();
-        tabFunc.initHead();
+        LinkedListTabulatedFunction otherTab = new LinkedListTabulatedFunction();
+        otherTab.initHead();
 
         FunctionNode curr = head;
+        FunctionNode lastCreated = otherTab.head;
         for (int i = 0; i < size; i++) {
-            curr = head.getPrev();
-            tabFunc.addNodeToTail((FunctionPoint)curr.getData().clone());
+            curr = curr.getNext();
+
+            FunctionNode node = new FunctionNode(otherTab.head, lastCreated, (FunctionPoint)curr.getData().clone());
+            otherTab.head.setPrev(node);
+            lastCreated.setNext(node);
+            lastCreated = node;
         }
 
-        tabFunc.lastAccessedIndex = lastAccessedIndex;
-        tabFunc.lastAccessedNode = lastAccessedNode;
+        otherTab.size = size;
 
-        return tabFunc;
+        return otherTab;
     }
 }

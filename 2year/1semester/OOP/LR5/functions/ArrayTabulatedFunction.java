@@ -327,7 +327,14 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
                 return false;
 
             if (other instanceof ArrayTabulatedFunction) {
-                return Arrays.equals(((ArrayTabulatedFunction)other).points, points);
+                ArrayTabulatedFunction otherArr = (ArrayTabulatedFunction)other;
+                for (int i = 0; i < otherArr.size; i++) {
+                    if (!points[i].equals(otherArr.points[i])) {
+                        return false;
+                    }
+                }
+                
+                return true;
             }
 
             for (int i = 0; i < other.getPointsCount(); i++) {
