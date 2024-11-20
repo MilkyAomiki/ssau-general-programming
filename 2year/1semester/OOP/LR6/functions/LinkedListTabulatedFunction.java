@@ -345,12 +345,24 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Externali
         if (Double.compare(x, getLeftDomainBorder()) < 0 || Double.compare(x, getRightDomainBorder()) > 0)
             return Double.NaN;
 
-        //линейная интерполяция
-        double x2 = getRightmost().getX();
-        double y2 = getRightmost().getY();
+        FunctionNode curr = head.getNext();
+        while (Double.compare(x, curr.getData().getX()) > 0) {
+            curr = curr.getNext();
+        }
 
-        double x1 = getLeftmost().getX();
-        double y1 = getLeftmost().getY();
+        if (Double.compare(curr.getData().getX(), x) == 0) {
+            return curr.getData().getY();
+        }
+
+        FunctionPoint rightBound = curr.getData();
+        FunctionPoint leftBound = curr.getPrev().getData();
+
+        //линейная интерполяция
+        double x2 = rightBound.getX();
+        double y2 = rightBound.getY();
+
+        double x1 = leftBound.getX();
+        double y1 = leftBound.getY();
 
         double y = (y2-y1)*(x-x1)/(x2-x1) + y1;
 

@@ -91,7 +91,7 @@ public final class Functions {
 
         double integralSum = 0;
         double currRightX = leftLim+step;
-        for (; currRightX <= rightLim; currRightX += step) {
+        for (; Double.compare(currRightX, rightLim) <= 0; currRightX += step) {
             double leftX = currRightX - step;
 
             double xLength = currRightX - leftX;
@@ -103,7 +103,7 @@ public final class Functions {
         }
 
         //добиавем оставшееся
-        if (currRightX < rightLim) {
+        if (Double.compare(currRightX, rightLim) < 0) {
             double leftX = currRightX;
 
             double xLength = rightLim - leftX;
