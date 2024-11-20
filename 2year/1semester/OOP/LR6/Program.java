@@ -1,7 +1,7 @@
-import java.util.Random;
-
 import functions.Functions;
 import functions.basic.Log;
+import functions.threads.SimpleGenerator;
+import functions.threads.SimpleIntegrator;
 import functions.threads.Task;
 
 public class Program {
@@ -17,12 +17,23 @@ public class Program {
     public static final String ANSI_WHITE = "\u001B[37m";
 
     public static void main(String[] args) {
-        nonThread();
+        simpleThreads();
+        //nonThread();
+    }
+
+    public static void simpleThreads() {
+        Task task = new Task(100);
+        Thread threadGen = new Thread(new SimpleGenerator(task), "Generator thread");
+        Thread threadInt = new Thread(new SimpleIntegrator(task), "Integrator thread");
+
+        threadGen.setPriority(Thread.MAX_PRIORITY);
+        threadInt.setPriority(Thread.MIN_PRIORITY);
+        threadGen.start();
+        threadInt.start();
     }
 
     public static void nonThread() {
-        Task task = new Task();
-        task.setTaskCount(100);
+        Task task = new Task(100);
 
         for (int i = 0; i < task.getTaskCount(); i++) {
 

@@ -3,6 +3,11 @@ package functions.threads;
 import functions.Function;
 
 public class Task {
+    public Task(int taskCount) {
+        this.taskCount = taskCount;
+    }
+
+    public Boolean isGenerated = false;
     private Function func;
     private double leftLim;
     private double rightLim;
@@ -44,9 +49,5 @@ public class Task {
 
     public int getTaskCount() {
         return taskCount;
-    }
-
-    public void setTaskCount(int taskCount) {
-        this.taskCount = taskCount;
     }
 }
