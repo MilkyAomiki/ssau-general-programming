@@ -23,15 +23,6 @@ public class SimpleIntegrator implements Runnable {
 
             synchronized (task)
             {
-                if (!task.isGenerated) {
-                    try {
-                        task.wait();
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-
                 //System.out.println(ANSI_GREEN + "READING DATA " + ANSI_RESET + i);
 
                 func = task.getFunc();
@@ -41,17 +32,13 @@ public class SimpleIntegrator implements Runnable {
 
                 //System.out.println(ANSI_GREEN + "DATA READ" + ANSI_RESET + i);
 
-                task.isGenerated = false;
                 task.notifyAll();
 
-
                 //System.out.println(ANSI_GREEN + "INTEGRATING DATA " + ANSI_RESET + i);
-
             }
 
             double integral = Functions.integrate(func, leftLim, rightLim, integrationStep);
             System.out.println(ANSI_GREEN + "Result " + ANSI_RESET + leftLim + " " + rightLim + " " + integrationStep + " " + integral);
         }
     }
-    
 }

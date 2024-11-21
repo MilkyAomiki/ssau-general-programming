@@ -1,5 +1,8 @@
 import functions.Functions;
 import functions.basic.Log;
+import functions.threads.Generator;
+import functions.threads.Integrator;
+import functions.threads.Sem;
 import functions.threads.SimpleGenerator;
 import functions.threads.SimpleIntegrator;
 import functions.threads.Task;
@@ -17,6 +20,7 @@ public class Program {
     public static final String ANSI_WHITE = "\u001B[37m";
 
     public static void main(String[] args) {
+        //complicatedThreads();
         simpleThreads();
         //nonThread();
     }
@@ -30,6 +34,29 @@ public class Program {
         threadInt.setPriority(Thread.MIN_PRIORITY);
         threadGen.start();
         threadInt.start();
+    }
+
+    public static void complicatedThreads() {
+        Task task = new Task(100);
+        Sem sem = new Sem();
+
+        Thread threadGen = new Generator(task, sem);
+        Thread threadInt = new Integrator(task, sem);
+
+        //threadGen.setPriority(Thread.MIN_PRIORITY);
+        //threadInt.setPriority(Thread.MAX_PRIORITY);
+        threadGen.start();
+        threadInt.start();
+
+        try {
+            Thread.sleep(20);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        threadGen.interrupt();
+        threadInt.interrupt();
     }
 
     public static void nonThread() {

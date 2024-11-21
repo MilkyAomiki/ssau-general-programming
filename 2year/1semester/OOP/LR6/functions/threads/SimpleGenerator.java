@@ -18,15 +18,6 @@ public class SimpleGenerator implements Runnable {
     
             synchronized(task)
             {
-                if (task.isGenerated) {
-                    try {
-                        task.wait();
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-
                 //System.out.println(ANSI_BLUE + "SETTING DATA " + ANSI_RESET + i);
 
                 task.setFunc(new Log(1 + 9*Math.random()));
@@ -36,11 +27,9 @@ public class SimpleGenerator implements Runnable {
 
                 //System.out.println(ANSI_BLUE + "DATA SET" + ANSI_RESET + i);
 
-                task.isGenerated = true;
                 task.notifyAll();
-
             }
-            
+
             System.out.println(ANSI_BLUE + "Source " + ANSI_RESET + task.getLeftLim() + " " + task.getRightLim() + " " + task.getIntegrationStep());
         }
     }

@@ -7,7 +7,6 @@ public class Task {
         this.taskCount = taskCount;
     }
 
-    public Boolean isGenerated = false;
     private Function func;
     private double leftLim;
     private double rightLim;
