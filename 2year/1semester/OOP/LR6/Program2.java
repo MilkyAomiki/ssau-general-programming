@@ -437,6 +437,7 @@ public class Program2 {
         System.out.println(ANSI_BLUE+"____LR6___________________________________________________________________________________________"+ANSI_RESET);
         System.out.println(ANSI_MAGENTA + "___________integral___________" + ANSI_RESET);
 
+        System.out.println(ANSI_GREEN + "-- exp:" + ANSI_RESET);
         Function expFuncForIntegral = new Exp();
         outputFuncWithStep(expFuncForIntegral, -1, 2, 0.5, format);
 
