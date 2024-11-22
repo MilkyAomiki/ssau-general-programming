@@ -2,6 +2,8 @@ package functions;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
     private FunctionPoint[] points;
@@ -361,6 +363,28 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable {
         tabFunc.size = size;
 
         return tabFunc;
+    }
+
+    @Override
+    public Iterator<FunctionPoint> iterator() {
+        return new Iterator<FunctionPoint>() {
+            private int currentIndex = 0;
+    
+            public boolean hasNext() {
+                return currentIndex < getSize();
+            }
+    
+            @Override
+            public FunctionPoint next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+
+                FunctionPoint functionPoint = points[currentIndex];
+                currentIndex++;
+                return functionPoint;
+            }
+        };
     }
 
 /*

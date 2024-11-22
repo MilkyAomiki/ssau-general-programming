@@ -4,6 +4,8 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class LinkedListTabulatedFunction implements TabulatedFunction, Externalizable {
     private FunctionNode head;
@@ -516,5 +518,27 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Externali
         otherTab.size = size;
 
         return otherTab;
+    }
+
+    @Override
+    public Iterator<FunctionPoint> iterator() {
+        return new Iterator<FunctionPoint>() {
+            private FunctionNode currentNode = head;
+    
+            public boolean hasNext() {
+                return currentNode.getNext() != head;
+            }
+    
+            @Override
+            public FunctionPoint next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+
+                currentNode = currentNode.getNext();
+                FunctionPoint functionPoint = currentNode.getData();
+                return functionPoint;
+            }
+        };
     }
 }
