@@ -4,6 +4,7 @@ import functions.FunctionPoint;
 import functions.LinkedListTabulatedFunction;
 import functions.TabulatedFunction;
 import functions.TabulatedFunctions;
+import functions.basic.Cos;
 import functions.basic.Sin;
 
 public class Program7 {
@@ -55,5 +56,27 @@ public class Program7 {
         sinTab = TabulatedFunctions.tabulate(sin, 0, Math.PI, 11);
         System.out.println(sinTab.getClass());
 
+
+        System.out.println(ANSI_MAGENTA + "___________Reflection___________" + ANSI_RESET);
+
+        System.out.println(ANSI_GREEN + "-- createTabulatedFunction(leftX, rightX, pointsCount, Class) | Array class:" + ANSI_RESET);
+        TabulatedFunction tabFunc = TabulatedFunctions.createTabulatedFunction(0, 10, 3, ArrayTabulatedFunction.class);
+        System.out.println(tabFunc.getClass());
+        System.out.println(tabFunc);
+
+        System.out.println(ANSI_GREEN + "-- createTabulatedFunction(leftX, rightX, values, Class) | Array class:" + ANSI_RESET);
+        tabFunc = TabulatedFunctions.createTabulatedFunction(0, 10, new double[] { 0, 10 }, ArrayTabulatedFunction.class);
+        System.out.println(tabFunc.getClass());
+        System.out.println(tabFunc);
+
+        System.out.println(ANSI_GREEN + "-- createTabulatedFunction(points, Class) | LinkedList class:" + ANSI_RESET);
+        tabFunc = TabulatedFunctions.createTabulatedFunction(new FunctionPoint[] { new FunctionPoint(0,0), new FunctionPoint(10,10) }, LinkedListTabulatedFunction.class);
+        System.out.println(tabFunc.getClass());
+        System.out.println(tabFunc);
+
+        System.out.println(ANSI_GREEN + "-- tabulate(..., Class) | LinkedList class:" + ANSI_RESET);
+        tabFunc = TabulatedFunctions.tabulate(new Cos(), 0, Math.PI, 11, LinkedListTabulatedFunction.class);
+        System.out.println(tabFunc.getClass());
+        System.out.println(tabFunc);
     }
 }
