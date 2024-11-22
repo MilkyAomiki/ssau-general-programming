@@ -3,9 +3,32 @@ package functions;
 import java.io.*;;
 
 public class TabulatedFunctions  {
+
+    private static TabulatedFunctionFactory tabFuncFactory = new LinkedListTabulatedFunction.LinkedListTabulatedFunctionFactory();
+
     //not allow creation
     private TabulatedFunctions() {}
     
+    public static void setTabulatedFunctionFactory(TabulatedFunctionFactory factory)
+    {
+        tabFuncFactory = factory;
+    }
+    
+    public static TabulatedFunction createTabulatedFunction(FunctionPoint[] points)
+    {
+        return tabFuncFactory.createTabulatedFunction(points);
+    }
+
+    public static TabulatedFunction createTabulatedFunction(double leftX, double rightX, int pointsCount)
+    {
+        return tabFuncFactory.createTabulatedFunction(leftX, rightX, pointsCount);
+    }
+
+    public static TabulatedFunction createTabulatedFunction(double leftX, double rightX, double[] values)
+    {
+        return tabFuncFactory.createTabulatedFunction(leftX, rightX, values);
+    }
+
     /**
      * получает функцию и возвращает её табулированный аналог на заданном отрезке с заданным количеством точек
      * @param function
@@ -37,7 +60,7 @@ public class TabulatedFunctions  {
             i++;
         }
 
-        return new LinkedListTabulatedFunction(points);
+        return createTabulatedFunction(points);
     }
 
     /**
@@ -80,7 +103,7 @@ public class TabulatedFunctions  {
             points[i] = new FunctionPoint(xVal, yVal);
         }
 
-        return new ArrayTabulatedFunction(points);
+        return createTabulatedFunction(points);
     }
     
     /**
@@ -126,6 +149,6 @@ public class TabulatedFunctions  {
             points[i] = new FunctionPoint(xVal, yVal);
         }
 
-        return new ArrayTabulatedFunction(points);
+        return createTabulatedFunction(points);
     }
 }
